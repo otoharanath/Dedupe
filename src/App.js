@@ -31,7 +31,7 @@ class App extends Component {
     let form = new FormData();
     form.append('upload_file', file);
 
-    fetch('https://otobots.otomashen.com:6969/dedupe', {
+    fetch('https://otobots.otomashen.com:6969/dedupe/', {
       method: 'POST',
       body: form
     })
@@ -51,7 +51,7 @@ class App extends Component {
     const mergedData = responseData
       .map(item => {
 
-        // remove the row if it match with the main merge row.
+        // remove the row if it matchs with the main merge row.
         let matches = item.matches.map(match => JSON.parse(match));
         const index = matches.findIndex(match => match.index === parentId);
 
@@ -61,7 +61,7 @@ class App extends Component {
           return false;
         }
 
-        // update the main row data after merge selection.
+        // update the main row data after merging the selection.
         if (item.id === parentId) {
           item.data = JSON.stringify({
             company_name: finalData.company_name.value,
@@ -80,7 +80,7 @@ class App extends Component {
               return JSON.stringify(match);
             });
 
-          // remove matches of all checked checkboxes data.
+          // remove matches of all checked checkboxes.
           item.matches = filteredMatches;
         }
         return item;
@@ -93,6 +93,7 @@ class App extends Component {
   };
 
   render() {
+    console.log("response",this.state.responseData)
     return (
       <div className="container-fluid">
         <Navbar bg="dark" variant="dark" sticky="top" expand="lg">

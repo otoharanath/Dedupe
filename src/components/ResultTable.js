@@ -5,6 +5,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { isUserWhitespacable } from '@babel/types';
 
 class ResultTable extends React.Component {
   constructor(props) {
@@ -28,10 +29,10 @@ class ResultTable extends React.Component {
       e.disabled = true;
     });
 
-    var items=document.getElementsByName('checkbox');
-    for(var i=0; i<items.length; i++){
-      if(items[i].type=='checkbox')
-        items[i].checked=false;
+    var items = document.getElementsByName('checkbox');
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].type == 'checkbox')
+        items[i].checked = false;
     }
   }
 
@@ -71,14 +72,20 @@ class ResultTable extends React.Component {
       const item = items[items.findIndex(items => items.id == b.index)]
       let parsed = JSON.parse(
         item && item.data || null
+
       );
-      if(!parsed) return <></>
+      let dynamicMatch = Object.values(parsed);
+      if (!parsed) return <></>
       return (
         <tr key={index1}>
           <td>{b.index}</td>
-          <td>{parsed.first_name}</td>
+          {dynamicMatch.map((heads) => {
+            return <td>{heads}</td>
+          })
+          }
+          {/*  <td>{parsed.first_name}</td>
           <td>{parsed.last_name}</td>
-          <td>{parsed.company_name}</td>
+          <td>{parsed.company_name}</td> */}
           <td>{b.rating.toFixed(2)}</td>
           <td>
             {this.action(row.id, b, parsed)}
@@ -102,7 +109,7 @@ class ResultTable extends React.Component {
     let rows = row.matches.map(match => {
       let b = JSON.parse(match);
       const index = data.findIndex(item => item.id === b.index);
-      try{
+      try {
         return {
           data: JSON.parse(data[index] && data[index].data || '{}'),
           id: data[index].id,
@@ -136,28 +143,46 @@ class ResultTable extends React.Component {
     this.forceUpdate();
   };
 
+ toProperCase = function (txt) {
+    return txt.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
   getRowsData = () => {
     const items = this.props.data;
     const buttonstyle = { paddingTop: '5%' };
     return items.map((row, index) => {
       const user = JSON.parse(row.data);
+      let yoyo = [];
+      yoyo = Object.keys(user);
+      let tabData = Object.values(user);
       return (
         <tr key={index}>
           <td>{row.id}</td>
           <td>
             <Table striped bordered variant="dark">
               <thead>
+
                 <tr>
-                  <th>First Name</th>
+                  {
+                    yoyo.map((heads) => {
+                      return <th>{this.toProperCase(heads.replace("_"," "))}</th>
+                    })
+                  }
+                  {/*  <th>First Name</th>
                   <th>Last Name</th>
-                  <th>Company</th>
+                 <th>Company</th> */}
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>{user.first_name}</td>
+                  {
+                    tabData.map((heads) => {
+                      return <td>{heads}</td>
+                    })
+                  }
+                  {/* <td>{user.first_name}</td>
                   <td>{user.last_name}</td>
-                  <td>{user.company_name}</td>
+                  <td>{user.company_name}</td> */}
                 </tr>
               </tbody>
             </Table>
@@ -169,9 +194,14 @@ class ResultTable extends React.Component {
                 <thead>
                   <tr>
                     <th>Matched</th>
-                    <th>First Name</th>
+                    {
+                    yoyo.map((heads) => {
+                      return <th>{this.toProperCase(heads.replace("_"," "))}</th>
+                    })
+                  }
+                    {/* <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Company</th>
+                    <th>Company</th> */}
                     <th>Rating</th>
                     <th></th>
                   </tr>
@@ -183,18 +213,18 @@ class ResultTable extends React.Component {
           </td>
           <td style={buttonstyle}>
             {
-              row.matches && row.matches.length && 
-                <Button
-                  id={'row' + row.id}
-                  onClick={() => {
-                    this.showMerge(row);
-                  }}
-                  variant="success"
-                >
-                  Merge Record
+              row.matches && row.matches.length &&
+              <Button
+                id={'row' + row.id}
+                onClick={() => {
+                  this.showMerge(row);
+                }}
+                variant="success"
+              >
+                Merge Record
                 </Button> || ''
             }
-            </td>
+          </td>
         </tr>
       );
     });
