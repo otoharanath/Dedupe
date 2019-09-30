@@ -22,6 +22,8 @@ class ResultTable extends React.Component {
 
   componentDidMount() {
     this.markDisabledAllMergeButtons();
+    this.props.DedupeActions.globalResponse(this.props.data);
+
   }
 
   markDisabledAllMergeButtons = () => {
@@ -74,8 +76,8 @@ class ResultTable extends React.Component {
         item && item.data || null
 
       );
-      let dynamicMatch = Object.values(parsed);
       if (!parsed) return <></>
+      let dynamicMatch = Object.values(parsed);
       return (
         <tr key={index1}>
           <td>{b.index}</td>
@@ -231,7 +233,6 @@ class ResultTable extends React.Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <Table striped bordered responsive variant="dark">
@@ -253,7 +254,9 @@ class ResultTable extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    showDedupe: state.DedupeReducer.showDedupe
+    showDedupe: state.DedupeReducer.showDedupe,
+    inputResponse: state.DedupeReducer.inputResponse
+
   };
 }
 

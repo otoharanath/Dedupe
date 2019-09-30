@@ -11,60 +11,78 @@ class MergeModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      titles: ['First Name', 'Last Name', 'Company'],
       isValid: false,
-      finalData: {
-        first_name: {
-          value: '',
-          isInput: false,
-          index: -1
-        },
-        last_name: {
-          value: '',
-          isInput: false,
-          index: -1
-        },
-        company_name: {
-          value: '',
-          isInput: false,
-          index: -1
-        }
-      }
+      finalData: {},
+      inProgress: false,
+      actionData : {
+        primaryId : null,
+        matchedIds : [],
+        function : 'merge',
+        finalRecord : {},
+        timestamp : Date.now()
+      },
+      sendData: {}
     };
   }
 
   closePopUp = () => {
+    this.setState({
+      inProgress: false
+    })
+
     this.props.DedupeActions.setShowModal(false);
   };
 
   selectedValue = (value, key, index, isInput = false) => {
-    const { finalData } = this.state;
+    const { finalData, sendData } = this.state;
+    //const { sendData } = this.state;
     finalData[key]['value'] = value;
     finalData[key]['isInput'] = isInput;
     finalData[key]['index'] = index;
+    sendData[key] = value;
+
     const inValidFields = Object.keys(finalData).filter(
       key => !finalData[key].value
     );
     this.setState({
-      finalData,
+      finalData,   
       isValid: !(inValidFields && inValidFields.length)
     });
+
+    //sendData[key][]
   };
+
+  getHeader(colomn){
+    const colomnArray = colomn.split('_');
+    const colomnName = colomnArray.map((colomnText) => {
+      return colomnText[0].toUpperCase() + colomnText.substr(1, colomnText.length)
+    })
+    return colomnName.join(" ");
+  }
 
   createRows() {
     const { rows } = this.props;
-    const { titles } = this.state;
     const rowsData = rows.rows;
     const colomns =
       rowsData && rowsData.length && Object.keys(rowsData[0].data);
-    const { finalData } = this.state;
+    const { finalData,sendData } = this.state;
+
     return (
       colomns &&
       colomns.length &&
       colomns.map((key, index) => {
+        finalData[key] = finalData[key] || {
+          value: '',
+          isInput: false,
+          index: -1
+        };
+        sendData[key] = sendData[key] || {
+          value: ''
+        }
+          
         return (
           <tr key={index}>
-            <th>{titles[index]}</th>
+            <th>{this.getHeader(colomns[index])}</th>
             {rowsData.map((row, idx) => {
               return (
                 <td
@@ -104,6 +122,11 @@ class MergeModal extends React.Component {
   }
 
   onSave = () => {
+    const { finalData,sendData, isValid } = this.state;
+
+  /*   this.setState({
+      inProgress: true
+    })
     const { finalData, isValid } = this.state;
     const {
       rows: { afterMerge, markDisabledAllMergeButtons }
@@ -115,31 +138,33 @@ class MergeModal extends React.Component {
         rows: this.props.rows.rows,
         unCheckedIds: this.props.rows.unCheckedIds
       });
-      markDisabledAllMergeButtons()
+      markDisabledAllMergeButtons() */
+      let stringified = JSON.stringify(sendData)
+      
+        this.state.actionData.primaryId = this.props.rows && this.props.rows.rows && this.props.rows.rows[0] && this.props.rows.rows[0].id
+        this.state.actionData.matchedIds = this.props.rows && this.props.rows.rows && this.props.rows.rows.slice(1).map((ids) => ids.id)
+        this.state.actionData.function = 'merge'
+        this.state.actionData.finalRecord = stringified
+        this.state.actionData.timestamp = Date.now()
+    
+  let finalSend = JSON.stringify(this.state.actionData)
+    let tid = this.props.initialTransaction
+    
+   
+      
+ 
+    console.log("before",finalSend)
+    //console.log("after",JSON.stringify(JSON.stringify(sendData)))
+
+   this.props.DedupeActions.updateTransaction(finalSend,tid)
       this.setState({
-        finalData: {
-          first_name: {
-            value: '',
-            isInput: false,
-            index: -1
-          },
-          last_name: {
-            value: '',
-            isInput: false,
-            index: -1
-          },
-          company_name: {
-            value: '',
-            isInput: false,
-            index: -1
-          }
-        },
+        finalData: {},
         isValid: false
       });
       this.closePopUp();
       this.forceUpdate();
     }
-  };
+  
 
   render() {
     return (
@@ -164,7 +189,8 @@ class MergeModal extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <Button
-            centered
+              disabled={this.state.inProgress}
+              centered={true}
               variant="success"
               onClick={() => {
                 this.onSave();
@@ -173,7 +199,7 @@ class MergeModal extends React.Component {
               Save
             </Button>
             <Button
-            centered
+              centered={true}
               variant="danger"
               onClick={() => {
                 this.closePopUp();
@@ -191,7 +217,8 @@ class MergeModal extends React.Component {
 function mapStateToProps(state) {
   return {
     showDedupe: state.DedupeReducer.showDedupe,
-    rows: state.DedupeReducer.rows
+    rows: state.DedupeReducer.rows,
+    initialTransaction:state.DedupeReducer.initialTransaction
   };
 }
 

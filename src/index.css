@@ -1,16 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 
 body {
   margin: 0;
-  font-family: 'Roboto',
-    sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .modal-content {
@@ -21,7 +19,6 @@ code {
   color: #fff;
   padding: 15px;
 }
-
 
 .modal-header {
   padding: 0 0 15px;
@@ -52,7 +49,6 @@ code {
 
 .modal-dialog .table-sm td,
 .modal-dialog .table-sm th {
-
   color: #fff;
 }
 
@@ -92,11 +88,34 @@ code {
   background: green;
 }
 
-
 .modal-input {
   border: 1px solid #454d55;
   vertical-align: middle;
   background: #343a40;
   color: #fff;
+}
 
+.loader-spiner {
+  width: calc(100vw - 15px);
+  height: calc(100vh - 15px);
+  z-index: 100000000;
+}
+
+.loader-spiner ._loading_overlay_overlay{
+  z-index: 100000;
+  opacity: 0.5;
+}
+
+.container-without-scroll {
+  max-width: calc(100vw - 15px);
+  max-height: calc(100vh - 15px);
+  overflow: hidden;
+}
+
+.modal-backdrop.show {
+  z-index: 100000000;
+}
+
+.modal-open .modal {
+  z-index: 100000001;
 }
