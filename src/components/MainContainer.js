@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Navbar from 'react-bootstrap/Navbar';
 import ResultTable from './ResultTable';
 import DedupeActions from '../actions/DedupeActions';
+import { bindActionCreators } from 'redux';
 
 import LoadingOverlay from 'react-loading-overlay';
 import LoadingBar from 'react-top-loading-bar';
@@ -18,12 +19,17 @@ class MainContainer extends React.Component {
       isLoading: false,
       responseData: null,
       loadingBarProgress: 0,
-      fileName: 'Choose File'
+      fileName: 'Choose File',
+      downloadFile: null
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.fileUpload = this.fileUpload.bind(this);
+    this.undoAction = this.undoAction.bind(this);
+    this.redoAction = this.redoAction.bind(this);
+    this.exportExcel = this.exportExcel.bind(this);
   }
+
 
   onFormSubmit(e) {
     e.preventDefault();
@@ -135,7 +141,51 @@ class MainContainer extends React.Component {
     this.setState({ loadingBarProgress: 0 });
   };
 
+  undoAction() {
+    let undoObject = {
+      version : this.props.initialTransaction && this.props.initialTransaction.version - 1,
+      transactionId : this.props.initialTransaction && this.props.initialTransaction.transactionId
+    }
+   // this.props.DedupeActions.setCurrentVersion(undoObject);
+    this.props.DedupeActions.getTransactionStateUndoRedo(undoObject);
+    this.forceUpdate();
+  }
+
+  redoAction() {
+    let redoObject = {
+      version : this.props.initialTransaction && this.props.initialTransaction.version + 1,
+      transactionId : this.props.initialTransaction && this.props.initialTransaction.transactionId
+    }
+   // this.props.DedupeActions.setCurrentVersion(redoObject);
+    this.props.DedupeActions.getTransactionStateUndoRedo(redoObject);
+    this.forceUpdate();
+  }
+
+  exportExcel(data) {
+     console.log("in download", data)
+      let fd = new FormData();
+      fd.append('transactionId', data.transactionId)
+      fd.append('version', data.version)
+      fetch('https://otobots.otomashen.com:6969/dedupe/downloadFile', {
+        method: 'POST',
+        body: fd
+      }).then(response => {
+      //  console.log("in download response", response)
+        response.blob()
+        .then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'export.csv';
+					a.click();
+				})
+      })
+      }
+  
+
   render() {
+console.log("initialobject",this.props.initialTransaction)
+console.log("current",this.props.currentVersion)
 
     const { responseData } = this.state;
     return (
@@ -187,9 +237,21 @@ class MainContainer extends React.Component {
               <div>
               </div>
 
-              <Button variant="primary" className=" fa fa-undo " size="lg" style={{ color: "#FFF" }}>&nbsp;Undo</Button>&nbsp;
-          <Button variant="primary" className=" fa fa-repeat " size="lg" style={{ color: "#FFF" }}>&nbsp;Redo</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button variant="success" className=" fa fa-download " size="lg" style={{ color: "#FFF" }}>&nbsp;Export</Button>
+          <Button variant="primary" 
+          disabled = {this.props.initialTransaction && this.props.initialTransaction.version == 0 ? true : false }
+          className=" fa fa-undo " size="lg" style={{ color: "#FFF" }}  onClick = {this.undoAction}>&nbsp;Undo
+         
+          </Button>&nbsp;
+          <Button variant="primary" className=" fa fa-repeat " size="lg" style={{ color: "#FFF" }}
+          disabled = {(this.props.initialTransaction && this.props.initialTransaction.version) < (this.props.currentVersion && this.props.currentVersion.version)
+            ? false : true }
+          onClick = {this.redoAction}
+          >&nbsp;Redo</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <Button variant="success" className=" fa fa-download " size="lg" style={{ color: "#FFF" }
+         }
+         disabled = {this.props.initialTransaction && this.props.initialTransaction.version == 0 ? true : false}
+          onClick = {() => this.exportExcel(this.props.initialTransaction)}
+          >&nbsp;Export</Button>
 
 
             </Navbar>
@@ -216,14 +278,19 @@ const mapStateToProps = (state, ownProps) => {
   return {
     // You can now say this.props.books
     dedupeData: state.DedupeReducer.dedupeData,
-    loadingBarProgress: state.DedupeReducer.percentage
+    loadingBarProgress: state.DedupeReducer.percentage,
+    initialTransaction : state.DedupeReducer.initialTransaction,
+    currentVersion : state.DedupeReducer.currentVersion
   }
 };
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    postTransaction: (formData) => dispatch(DedupeActions.postTransaction(formData))
+    postTransaction: (formData) => dispatch(DedupeActions.postTransaction(formData)),
+    DedupeActions: bindActionCreators(DedupeActions, dispatch)
+
+    //getTransactionState: (formData) => dispatch(DedupeActions.getTransactionState(formData))
   }
 };
 
