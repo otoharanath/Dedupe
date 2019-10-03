@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
-
+import OptionSelectModal from './OptionSelectModal';
 import Navbar from 'react-bootstrap/Navbar';
 import ResultTable from './ResultTable';
 import DedupeActions from '../actions/DedupeActions';
 import { bindActionCreators } from 'redux';
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import LoadingOverlay from 'react-loading-overlay';
 import LoadingBar from 'react-top-loading-bar';
+
+var Papa = require("papaparse/papaparse.min.js");
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -20,7 +24,10 @@ class MainContainer extends React.Component {
       responseData: null,
       loadingBarProgress: 0,
       fileName: 'Choose File',
-      downloadFile: null
+      downloadFile: null,
+      csvData:[],
+      thresholdValues : [0.5,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1],
+      threshold : 0.75
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -28,6 +35,8 @@ class MainContainer extends React.Component {
     this.undoAction = this.undoAction.bind(this);
     this.redoAction = this.redoAction.bind(this);
     this.exportExcel = this.exportExcel.bind(this);
+    this.updateData = this.updateData.bind(this);
+    this.thresholdChange = this.thresholdChange.bind(this);
   }
 
 
@@ -47,15 +56,22 @@ class MainContainer extends React.Component {
 
   fileUpload(file) {
     if(file) {
-      let form = new FormData();
-      form.append('upload_file', file);
-      form.append('threshold', 0.75);
-      this.setState({
-        isLoading: true
-      })
+      Papa.parse(file, {
+        complete: this.updateData,
+        header: false
+      });
       // fetch file data.
-      this.props.postTransaction(form)
+     // this.props.postTransaction(form)
     }
+  }
+
+  updateData(result) {
+    var dataParse = result.data;
+    this.setState({
+      csvData:dataParse[0]
+    });
+    this.props.DedupeActions.setShowSelectModal(true);
+   this.forceUpdate();
   }
 
   afterMerge = params => {
@@ -181,6 +197,12 @@ class MainContainer extends React.Component {
 				})
       })
       }
+
+      thresholdChange(input){
+        this.setState({
+          threshold:input
+        });
+      }
   
 
   render() {
@@ -237,6 +259,15 @@ console.log("current",this.props.currentVersion)
               <div>
               </div>
 
+    <DropdownButton size = "sm" id="dropdown-item-button" title={"Threshold: "+this.state.threshold}>
+      {this.state.thresholdValues.map((eachValue) => {
+        return(
+          <Dropdown.Item onClick = {() => this.thresholdChange(eachValue)} as="button">{eachValue}</Dropdown.Item>
+        )
+      })}
+
+</DropdownButton>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Button variant="primary" 
           disabled = {this.props.initialTransaction && this.props.initialTransaction.version == 0 ? true : false }
           className=" fa fa-undo " size="lg" style={{ color: "#FFF" }}  onClick = {this.undoAction}>&nbsp;Undo
@@ -268,6 +299,7 @@ console.log("current",this.props.currentVersion)
             </div>
           </div>
          </LoadingOverlay> 
+         <OptionSelectModal threshold = {this.state.threshold} file = {this.state.file} csvData = {this.state.csvData} />
       </>
     );
   }

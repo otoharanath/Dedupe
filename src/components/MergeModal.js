@@ -149,10 +149,7 @@ class MergeModal extends React.Component {
     
   let finalSend = JSON.stringify(this.state.actionData)
     let tid = this.props.initialTransaction
-    
-   
-      
- 
+
     console.log("before",finalSend)
     //console.log("after",JSON.stringify(JSON.stringify(sendData)))
 

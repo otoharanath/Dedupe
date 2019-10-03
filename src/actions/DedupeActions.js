@@ -6,12 +6,17 @@ import {
   FETCH_TABLE_DATA,
   FETCH_TABLE_DATA_PERCENTAGE,
   INITIAL_TRANSACTION,
-  CURRENT_VERSION
+  CURRENT_VERSION,
+  SHOW_SELECT_MODAL
 } from '.';
 
 let actions = {
   setShowModal: value => ({
     type: SHOW_MODAL,
+    data: value
+  }),
+  setShowSelectModal: value => ({
+    type: SHOW_SELECT_MODAL,
     data: value
   }),
   setSelectedRowsData: rows => ({
@@ -26,10 +31,6 @@ let actions = {
     type: GLOBAL_RESPONSE,
     data: data
   }),
-  setCurrentVersion: data => ({
-    type: INITIAL_TRANSACTION,
-    initialTransaction: data
-  }),
   postTransaction: (body) => {
     return function (dispatch) {
 
@@ -37,8 +38,7 @@ let actions = {
         method: 'POST',
         body
       })
-        .then((data) => (data.json()))
-       
+        .then((data) => (data.json()))      
         .then((data) => {
 
           dispatch({

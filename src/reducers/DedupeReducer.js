@@ -5,7 +5,8 @@ import { AFTER_MERGE_SAVE,
   FETCH_TABLE_DATA,
   FETCH_TABLE_DATA_PERCENTAGE,
   INITIAL_TRANSACTION,
-  CURRENT_VERSION
+  CURRENT_VERSION,
+  SHOW_SELECT_MODAL
 } from '../actions';
 
 const InitialState = {
@@ -22,6 +23,9 @@ let DedupeReducer = function (state = InitialState, action) {
   switch (action.type) {
     case SHOW_MODAL:
       return Object.assign({}, state, { showDedupe: action.data });
+
+      case SHOW_SELECT_MODAL:
+        return Object.assign({}, state, { showSelect: action.data });
 
     case SELECTED_ROW_DATA:
       return Object.assign({}, state, { rows: action.data });
