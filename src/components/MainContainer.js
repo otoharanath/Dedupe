@@ -52,6 +52,7 @@ class MainContainer extends React.Component {
       file: e.target.files && e.target.files[0],
       fileName: e.target.files && e.target.files[0] && e.target.files[0].name
     });
+    this.props.active.filename = e.target.files && e.target.files[0] && e.target.files[0].name
   }
 
   fileUpload(file) {
@@ -178,7 +179,7 @@ class MainContainer extends React.Component {
   }
 
   exportExcel(data) {
-     console.log("in download", data)
+   
       let fd = new FormData();
       fd.append('transactionId', data.transactionId)
       fd.append('version', data.version)
@@ -206,8 +207,6 @@ class MainContainer extends React.Component {
   
 
   render() {
-console.log("initialobject",this.props.initialTransaction)
-console.log("current",this.props.currentVersion)
 
     const { responseData } = this.state;
     return (
@@ -251,7 +250,7 @@ console.log("current",this.props.currentVersion)
                     aria-describedby="inputGroupFileAddon01"
                   />
                   <label className="custom-file-label" htmlFor="inputGroupFile01">
-                    {this.state.fileName}{' '}
+                    {this.props.active && this.props.active.filename}
                   </label>
                 </div>
                 &nbsp; &nbsp; &nbsp;
@@ -308,11 +307,11 @@ console.log("current",this.props.currentVersion)
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
   return {
-    // You can now say this.props.books
     dedupeData: state.DedupeReducer.dedupeData,
     loadingBarProgress: state.DedupeReducer.percentage,
     initialTransaction : state.DedupeReducer.initialTransaction,
-    currentVersion : state.DedupeReducer.currentVersion
+    currentVersion : state.DedupeReducer.currentVersion,
+    active:state.DedupeReducer.active
   }
 };
 

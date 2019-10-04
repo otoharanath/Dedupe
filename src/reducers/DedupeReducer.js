@@ -16,7 +16,8 @@ const InitialState = {
   inputResponse: {},
   responseData: {},
   initialTransaction: {},
-  currentVersion:{}
+  currentVersion:{},
+  active:{}
 };
 
 let DedupeReducer = function (state = InitialState, action) {
