@@ -29,7 +29,6 @@ class MergeModal extends React.Component {
     this.setState({
       inProgress: false
     })
-
     this.props.DedupeActions.setShowModal(false);
   };
 
