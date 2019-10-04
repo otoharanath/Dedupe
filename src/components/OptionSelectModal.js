@@ -41,7 +41,7 @@ onSave() {
   let form = new FormData();
   form.append('upload_file', this.props.file);
   form.append('threshold', this.props.threshold);
-  form.append('selectedFields', JSON.stringify(this.state.selectedOptions));
+  form.append('selectedFields', this.state.selectedOptions.toString());
   this.props.DedupeActions.setShowSelectModal(false);
   this.props.DedupeActions.postTransaction(form)
 }

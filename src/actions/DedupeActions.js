@@ -170,7 +170,7 @@ export const getTransactionState = (data, dispatch) => {
         // Call API again if transaction is not completed after 1 sec of API response.
         setTimeout(() => {
           getTransactionState(data, dispatch);
-        }, 200)
+        }, 1000)
 
       } else {
         dispatch({
