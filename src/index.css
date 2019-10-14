@@ -8,15 +8,15 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: "Roboto", sans-serif;
 }
 
 .modal-content {
-  background-color: #3e444a;
+  background-color: rgba(14, 13, 13, 0.74);
   border: 0;
   border-radius: 0;
   outline: 0;
-  color: #fff;
+  color:#fff;
   padding: 15px;
 }
 

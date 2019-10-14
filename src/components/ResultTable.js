@@ -6,7 +6,13 @@ import Table from 'react-bootstrap/Table';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { isUserWhitespacable } from '@babel/types';
-
+const bg = require("./bg.jpg");
+const divStyle = {
+  width: "100%",
+  height: "100%",
+  backgroundSize: "cover",
+  backgroundRepeat: "repeat"
+};
 class ResultTable extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +21,8 @@ class ResultTable extends React.Component {
       userData: '',
       matchFound: 0,
       isChecked: false,
-      selectedRows: []
+      selectedRows: [],
+      background:bg
     };
     this.getRowsData = this.getRowsData.bind(this);
   }
@@ -192,7 +199,7 @@ class ResultTable extends React.Component {
 
           <td>
             {(row.matches && row.matches.length && (
-              <Table striped bordered variant="dark">
+              <Table striped bordered responsive style = {{color:"white"}} >
                 <thead>
                   <tr>
                     <th>Matched</th>
@@ -234,7 +241,16 @@ class ResultTable extends React.Component {
 
   render() {
     return (
-      <div>
+      <div
+      className="cComponent"
+      style={divStyle}
+      style={{ backgroundImage: `url(${this.state.background})`,
+      width: "100%",
+      height: "100%",
+      backgroundSize: "cover",
+      backgroundRepeat: "repeat-y" }}
+    >
+      
         <Table striped bordered responsive variant="dark">
           <thead>
             <tr>

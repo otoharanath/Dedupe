@@ -1,9 +1,12 @@
 import DedupeReducer from './DedupeReducer';
+import OtoJobsReducer from './OtoJobsReducer';
 import { combineReducers } from 'redux';
-import { reducer as toastrReducer } from 'react-redux-toastr';
+//import { reducer as toastrReducer } from 'react-redux-toastr';
+
 
 const rootReducer = combineReducers({
-  DedupeReducer: DedupeReducer
+  DedupeReducer: DedupeReducer,
+  OtoJobsReducer:OtoJobsReducer
 });
 
 export default rootReducer;

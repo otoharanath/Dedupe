@@ -1,17 +1,18 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import Button from 'react-bootstrap/Button';
-import OptionSelectModal from './OptionSelectModal';
-import Navbar from 'react-bootstrap/Navbar';
-import ResultTable from './ResultTable';
-import DedupeActions from '../actions/DedupeActions';
-import { bindActionCreators } from 'redux';
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
-
-import LoadingOverlay from 'react-loading-overlay';
-import LoadingBar from 'react-top-loading-bar';
-
+import React from "react";
+import { connect } from "react-redux";
+import Button from "react-bootstrap/Button";
+import OptionSelectModal from "./OptionSelectModal";
+import Navbar from "react-bootstrap/Navbar";
+import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
+import ResultTable from "./ResultTable";
+import DedupeActions from "../actions/DedupeActions";
+import { bindActionCreators } from "redux";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import Dropdown from "react-bootstrap/Dropdown";
+import LoadingOverlay from "react-loading-overlay";
+import LoadingBar from "react-top-loading-bar";
+import SideBar from "./sidebar";
+import Table from "react-bootstrap/Table";
 var Papa = require("papaparse/papaparse.min.js");
 
 class MainContainer extends React.Component {
@@ -23,11 +24,23 @@ class MainContainer extends React.Component {
       isLoading: false,
       responseData: null,
       loadingBarProgress: 0,
-      fileName: 'Choose File',
+      fileName: "Choose File",
       downloadFile: null,
-      csvData:[],
-      thresholdValues : [0.5,0.55,0.60,0.65,0.70,0.75,0.80,0.85,0.90,0.95,1],
-      threshold : 0.75
+      csvData: [],
+      thresholdValues: [
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8,
+        0.85,
+        0.9,
+        0.95,
+        1
+      ],
+      threshold: 0.75
     };
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -39,12 +52,11 @@ class MainContainer extends React.Component {
     this.thresholdChange = this.thresholdChange.bind(this);
   }
 
-
   onFormSubmit(e) {
     e.preventDefault();
     const { file } = this.state;
     this.fileUpload(file);
-    this.setState({ fileName: 'Choose File' });
+    this.setState({ fileName: "Choose File" });
   }
 
   onChange(e) {
@@ -52,27 +64,28 @@ class MainContainer extends React.Component {
       file: e.target.files && e.target.files[0],
       fileName: e.target.files && e.target.files[0] && e.target.files[0].name
     });
-    this.props.active.filename = e.target.files && e.target.files[0] && e.target.files[0].name
+    this.props.active.filename =
+      e.target.files && e.target.files[0] && e.target.files[0].name;
   }
 
   fileUpload(file) {
-    if(file) {
+    if (file) {
       Papa.parse(file, {
         complete: this.updateData,
         header: false
       });
       // fetch file data.
-     // this.props.postTransaction(form)
+      // this.props.postTransaction(form)
     }
   }
 
   updateData(result) {
     var dataParse = result.data;
     this.setState({
-      csvData:dataParse[0]
+      csvData: dataParse[0]
     });
     this.props.DedupeActions.setShowSelectModal(true);
-   this.forceUpdate();
+    this.forceUpdate();
   }
 
   afterMerge = params => {
@@ -84,7 +97,6 @@ class MainContainer extends React.Component {
     const parentId = rows[0].id;
     const mergedData = responseData
       .map(item => {
-
         // remove the row if it matchs with the main merge row.
         let matches = item.matches.map(match => JSON.parse(match));
         const index = matches.findIndex(match => match.index === parentId);
@@ -97,11 +109,11 @@ class MainContainer extends React.Component {
 
         // update the main row data after merging the selection.
         if (item.id === parentId) {
-          const keys = Object.keys(finalData)
+          const keys = Object.keys(finalData);
           let user = {};
-          keys.forEach((key) => {
+          keys.forEach(key => {
             user[key] = finalData[key].value;
-          })
+          });
           item.data = JSON.stringify(user);
         }
 
@@ -125,11 +137,11 @@ class MainContainer extends React.Component {
     this.setState({
       responseData: mergedData
     });
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setState({
         isLoading: false
-      })
-    }, 500)
+      });
+    }, 500);
   };
 
   componentWillReceiveProps(newProps) {
@@ -145,12 +157,12 @@ class MainContainer extends React.Component {
           displayTable: true,
           isLoading: false,
           loadingBarProgress: 0
-        })
-      }, 300)
+        });
+      }, 300);
     } else {
       this.setState({
         loadingBarProgress
-      })
+      });
     }
   }
 
@@ -160,170 +172,325 @@ class MainContainer extends React.Component {
 
   undoAction() {
     let undoObject = {
-      version : this.props.initialTransaction && this.props.initialTransaction.version - 1,
-      transactionId : this.props.initialTransaction && this.props.initialTransaction.transactionId
-    }
-   // this.props.DedupeActions.setCurrentVersion(undoObject);
+      version:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.version - 1,
+      transactionId:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.transactionId
+    };
+    // this.props.DedupeActions.setCurrentVersion(undoObject);
     this.props.DedupeActions.getTransactionStateUndoRedo(undoObject);
     this.forceUpdate();
   }
 
   redoAction() {
     let redoObject = {
-      version : this.props.initialTransaction && this.props.initialTransaction.version + 1,
-      transactionId : this.props.initialTransaction && this.props.initialTransaction.transactionId
-    }
-   // this.props.DedupeActions.setCurrentVersion(redoObject);
+      version:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.version + 1,
+      transactionId:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.transactionId
+    };
+    // this.props.DedupeActions.setCurrentVersion(redoObject);
     this.props.DedupeActions.getTransactionStateUndoRedo(redoObject);
     this.forceUpdate();
   }
 
   exportExcel(data) {
-   
-      let fd = new FormData();
-      fd.append('transactionId', data.transactionId)
-      fd.append('version', data.version)
-      fetch('https://otobots.otomashen.com:6969/dedupe/downloadFile', {
-        method: 'POST',
-        body: fd
-      }).then(response => {
+    let fd = new FormData();
+    fd.append("transactionId", data.transactionId);
+    fd.append("version", data.version);
+    fetch("https://otobots.otomashen.com:6969/dedupe/downloadFile", {
+      method: "POST",
+      body: fd
+    }).then(response => {
       //  console.log("in download response", response)
-        response.blob()
-        .then(blob => {
-					let url = window.URL.createObjectURL(blob);
-					let a = document.createElement('a');
-					a.href = url;
-					a.download = 'export.csv';
-					a.click();
-				})
-      })
-      }
+      response.blob().then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = "export.csv";
+        a.click();
+      });
+    });
+  }
 
-      thresholdChange(input){
-        this.setState({
-          threshold:input
-        });
-      }
-  
+  thresholdChange(input) {
+    this.setState({
+      threshold: input
+    });
+  }
+
+  toProperCase = function (txt) {
+    return txt.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+  };
 
   render() {
-
     const { responseData } = this.state;
     return (
-      <>
-        <LoadingBar
-          progress={this.state.loadingBarProgress}
-          height={7}
-          color='red'
-          onLoaderFinished={() => this.onLoaderFinished()}
-        />
-        <LoadingOverlay
-          active={this.state.isLoading}
-          className='loader-spiner'
-          spinner={true}
-          fadeSpeed={300}
-          text='Loading...'
-        > 
-          <div className={`container-fluid ${this.state.isLoading && 'container-without-scroll' || ''}`}>
+      <div>
+        <>
 
-            <Navbar bg="dark" variant="dark" sticky="top" expand="lg">
-              <Navbar.Brand href="#home">Dedupe Api Caller</Navbar.Brand>
+          <LoadingOverlay
+            active={this.state.isLoading}
+            className="loader-spiner"
+            spinner={true}
+            fadeSpeed={300}
+            text="Loading..."
+          >
+            {/*  <SideBar /> */}
 
-              <div className="input-group ">
-                <div className="input-group-prepend">
-                  &nbsp; &nbsp; &nbsp;
-              <br />
-                  <span
-                    onClick={this.onFormSubmit}
-                    className="input-group-text"
-                    id="inputGroupFileAddon01"
-                  >
-                    Upload
-              </span>
-                </div>
-                <div className="custom-file">
-                  <input
-                    type="file"
-                    className="custom-file-input"
-                    id="inputGroupFile01"
-                    onChange={this.onChange}
-                    aria-describedby="inputGroupFileAddon01"
+            <div
+              className={`container-fluid ${(this.state.isLoading &&
+                "container-without-scroll") || ""}`}>
+
+            {/*   <Navbar
+                style={{ background: 'rgba(53, 48, 48, 0.77)' }}
+
+                sticky="top"
+              >
+                <Navbar.Brand href="#home">
+                  <img
+                    alt=""
+                    src="./logo192.png"
+                    width="30"
+                    height="30"
+                    className="d-inline-block align-top"
                   />
-                  <label className="custom-file-label" htmlFor="inputGroupFile01">
-                    {this.props.active && this.props.active.filename}
-                  </label>
-                </div>
-                &nbsp; &nbsp; &nbsp;
-          </div>
-              <div>
-              </div>
+                  <strong style={{ color: 'white' }}>&nbsp;Otomashen</strong>
+                </Navbar.Brand>
+                <Nav className="mr-auto">
+                  <Nav.Link style={{ color: 'white' }} href="#home">Home</Nav.Link>
+                  <Nav.Link style={{ color: 'white' }} href="#features">Otojobs</Nav.Link>
+                  <Nav.Link style={{ color: 'sky' }} href="#pricing"><strong>Dedupe</strong></Nav.Link>
+                </Nav>
 
-    <DropdownButton size = "sm" id="dropdown-item-button" title={"Threshold: "+this.state.threshold}>
-      {this.state.thresholdValues.map((eachValue) => {
-        return(
-          <Dropdown.Item onClick = {() => this.thresholdChange(eachValue)} as="button">{eachValue}</Dropdown.Item>
-        )
-      })}
-
-</DropdownButton>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button variant="primary" 
-          disabled = {this.props.initialTransaction && this.props.initialTransaction.version == 0 ? true : false }
-          className=" fa fa-undo " size="lg" style={{ color: "#FFF" }}  onClick = {this.undoAction}>&nbsp;Undo
-         
-          </Button>&nbsp;
-          <Button variant="primary" className=" fa fa-repeat " size="lg" style={{ color: "#FFF" }}
-          disabled = {(this.props.initialTransaction && this.props.initialTransaction.version) < (this.props.currentVersion && this.props.currentVersion.version)
-            ? false : true }
-          onClick = {this.redoAction}
-          >&nbsp;Redo</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Button variant="success" className=" fa fa-download " size="lg" style={{ color: "#FFF" }
-         }
-         disabled = {this.props.initialTransaction && this.props.initialTransaction.version == 0 ? true : false}
-          onClick = {() => this.exportExcel(this.props.initialTransaction)}
-          >&nbsp;Export</Button>
-
-
-            </Navbar>
-            <div className="row justify-content-md-center"></div>
-            <div >
+              </Navbar> */}
+              <LoadingBar
+                progress={this.state.loadingBarProgress}
+                height={7}
+                color="red"
+                onLoaderFinished={() => this.onLoaderFinished()}
+              />
               {this.state.displayTable ? (
-                <ResultTable
-                  data={responseData}
-                  afterMerge={params => {
-                    this.afterMerge(params);
-                  }}
-                />
-              ) : null}
-            </div>
-          </div>
-         </LoadingOverlay> 
-         <OptionSelectModal threshold = {this.state.threshold} file = {this.state.file} csvData = {this.state.csvData} />
-      </>
-    );
-  }
-}
+                <Navbar
 
-// Maps state from store to props
+                  style={{
+                    position: "fixed",
+                    left: "50%",
+                    top: "95%",
+                    transform: "translate(-50%, -90%)",
+                    backgroundColor: 'rgba(14, 13, 13, 0.74)'
+                  }}
+                  sticky="bottom"
+                >
+                  <Navbar.Collapse className="justify-content-end">
+                    <Button
+                      variant="primary"
+                      disabled={
+                        this.props.initialTransaction &&
+                          this.props.initialTransaction.version == 0 &&
+                          this.props.initialTransaction
+                          ? true
+                          : false
+                      }
+
+                      size="sm"
+                      style={{ color: "#FFF" }}
+                      onClick={this.undoAction}
+                    >
+                      <span className=" fa fa-undo "></span>
+                      &nbsp;Undo
+                  </Button>
+                    &nbsp;  &nbsp;
+  
+                  <Button
+                      variant="primary"
+
+                      size="sm"
+                      style={{ color: "#FFF" }}
+                      disabled={
+                        (this.props.initialTransaction &&
+                          this.props.initialTransaction.version) <
+                          (this.props.currentVersion &&
+                            this.props.currentVersion.version)
+                          ? false
+                          : true
+                      }
+                      onClick={this.redoAction}
+                    >
+                      <span className=" fa fa-repeat "></span>
+                      &nbsp;Redo
+                  </Button>
+                    &nbsp;  &nbsp;
+                  <Button
+                      variant="success"
+
+                      size="sm"
+                      style={{ color: "#FFF" }}
+                      disabled={
+                        this.props.initialTransaction &&
+                          this.props.initialTransaction.version == 0
+                          ? true
+                          : false
+                      }
+                      onClick={() =>
+                        this.exportExcel(this.props.initialTransaction)
+                      }
+                    >
+                      <span className=" fa fa-download "></span>
+                      &nbsp;Export
+                  </Button>
+                  </Navbar.Collapse>
+                </Navbar>
+              ) : null}
+
+              {this.state.displayTable ? null : (
+                <div
+                  className="col-md-4 col-md-offset-4"
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    backgroundColor: 'rgba(14, 13, 13, 0.74)'
+                  }}
+                >
+                  <br />
+                  <div className="row">
+
+                    <div className="input-group col-md-9">
+                      &nbsp;&nbsp;
+                      <div className="input-group-prepend">
+                        <span
+                          onClick={this.onFormSubmit}
+                          className="input-group-text"
+                          id="inputGroupFileAddon01"
+                        >
+                          {" "}
+                          Upload{" "}
+                        </span>
+                      </div>
+                      <div className="custom-file">
+                        <input
+                          type="file"
+                          className="custom-file-input"
+                          id="inputGroupFile01"
+                          onChange={this.onChange}
+                          aria-describedby="inputGroupFileAddon01"
+                        />
+                        <label
+                          className="custom-file-label"
+                          htmlFor="inputGroupFile01"
+                        >
+                          {this.props.active && this.props.active.filename}
+                        </label>
+                      </div>
+                    </div>
+                    <div className="col-md-3">
+                      <DropdownButton
+                        size="md"
+                        id="dropdown-item-button"
+                        title={this.state.threshold}
+                      >&nbsp;
+                        {this.state.thresholdValues.map(eachValue => {
+                        return (
+                          <Dropdown.Item
+                            onClick={() => this.thresholdChange(eachValue)}
+                            as="button"
+                          >
+                            {eachValue}
+                          </Dropdown.Item>
+
+                        );
+                      })}
+                      </DropdownButton>
+                      
+                    </div>
+
+                  </div>
+                  <br />
+                </div>
+
+              )}
+
+              {/* <div
+                className="col-md-4 col-md-offset-4"
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "70%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: 'rgba(14, 13, 13, 0.74)'
+                }}
+              >
+               <div className = "row">
+               {this.state.csvData ? this.state.csvData.map((eachItem) => {
+                return (
+                  <div>
+                    <div className="list-group-item" style={{ padding: '5px' }}>
+                      <input type="checkbox" onChange={() => this.handleClick(eachItem)} />
+                      <strong style={{ color: 'black' }}>{this.toProperCase(eachItem.replace("_", " "))} </strong>
+
+                    </div>
+                    &nbsp;  &nbsp;
+                      </div>
+                )
+              }
+              ) : null}
+               </div>
+                </div> */}
+
+                <div className="row justify-content-md-center"></div>
+                <div>
+                  {this.state.displayTable ? (
+                    <ResultTable
+                      data={responseData}
+                      afterMerge={params => {
+                        this.afterMerge(params);
+                      }}
+                    />
+                  ) : null}
+                </div>
+              </div>
+          </LoadingOverlay>
+             <OptionSelectModal
+              threshold={this.state.threshold}
+              file={this.state.file}
+              csvData={this.state.csvData}
+            /> 
+        </>
+        </div>
+        );
+      }
+    }
+    
+    // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
   return {
-    dedupeData: state.DedupeReducer.dedupeData,
-    loadingBarProgress: state.DedupeReducer.percentage,
-    initialTransaction : state.DedupeReducer.initialTransaction,
-    currentVersion : state.DedupeReducer.currentVersion,
-    active:state.DedupeReducer.active
-  }
-};
-
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
+          dedupeData: state.DedupeReducer.dedupeData,
+        loadingBarProgress: state.DedupeReducer.percentage,
+        initialTransaction: state.DedupeReducer.initialTransaction,
+        currentVersion: state.DedupeReducer.currentVersion,
+        active: state.DedupeReducer.active
+      };
+    };
+    
+    // Maps actions to props
+const mapDispatchToProps = dispatch => {
   return {
-    postTransaction: (formData) => dispatch(DedupeActions.postTransaction(formData)),
-    DedupeActions: bindActionCreators(DedupeActions, dispatch)
-
-    //getTransactionState: (formData) => dispatch(DedupeActions.getTransactionState(formData))
-  }
-};
-
-// Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(MainContainer);
+          postTransaction: formData =>
+          dispatch(DedupeActions.postTransaction(formData)),
+        DedupeActions: bindActionCreators(DedupeActions, dispatch)
+    
+        //getTransactionState: (formData) => dispatch(DedupeActions.getTransactionState(formData))
+      };
+    };
+    
+    // Use connect to put them together
+    export default connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(MainContainer);

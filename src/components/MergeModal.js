@@ -51,25 +51,25 @@ class MergeModal extends React.Component {
     //sendData[key][]
   };
 
-  getHeader(colomn){
-    const colomnArray = colomn.split('_');
-    const colomnName = colomnArray.map((colomnText) => {
-      return colomnText[0].toUpperCase() + colomnText.substr(1, colomnText.length)
+  getHeader(column){
+    const columnArray = column.split('_');
+    const columnName = columnArray.map((columnText) => {
+      return columnText[0].toUpperCase() + columnText.substr(1, columnText.length)
     })
-    return colomnName.join(" ");
+    return columnName.join(" ");
   }
 
   createRows() {
     const { rows } = this.props;
     const rowsData = rows.rows;
-    const colomns =
+    const columns =
       rowsData && rowsData.length && Object.keys(rowsData[0].data);
     const { finalData,sendData } = this.state;
 
     return (
-      colomns &&
-      colomns.length &&
-      colomns.map((key, index) => {
+      columns &&
+      columns.length &&
+      columns.map((key, index) => {
         finalData[key] = finalData[key] || {
           value: '',
           isInput: false,
@@ -81,7 +81,7 @@ class MergeModal extends React.Component {
           
         return (
           <tr key={index}>
-            <th>{this.getHeader(colomns[index])}</th>
+            <th>{this.getHeader(columns[index])}</th>
             {rowsData.map((row, idx) => {
               return (
                 <td
