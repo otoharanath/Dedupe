@@ -244,11 +244,11 @@ class ResultTable extends React.Component {
       <div
       className="cComponent"
       style={divStyle}
-      style={{ backgroundImage: `url(${this.state.background})`,
+      style={{ 
       width: "100%",
       height: "100%",
       backgroundSize: "cover",
-      backgroundRepeat: "repeat-y" }}
+     }}
     >
       
         <Table striped bordered responsive variant="dark">

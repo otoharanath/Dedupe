@@ -6,8 +6,8 @@ import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Box from '@material-ui/core/Box';
 //import { threadId } from 'worker_threads';
-
 class OptionSelectModal extends React.Component {
   constructor(props) {
     super(props);
@@ -67,7 +67,19 @@ class OptionSelectModal extends React.Component {
             <Modal.Title>Select Dedupe Options</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="row" style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ width: '100%' }}>
+                      <Box display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
+                        {this.props.csvData.map((item) => {
+                          return (
+                            <Box style={{ cursor: 'pointer' }} bgcolor={this.state.selectedOptions.includes(item) ? "green" : "white"}
+                              onClick={() => this.handleClick(item)} color={this.state.selectedOptions.includes(item) ? "white" : "black"} p={1} m={0.5} display='flex'
+                              justifyContent='center'>{this.toProperCase(item.replace("_", " "))}</Box>)
+                        })
+                        }
+                      </Box>
+                    </div>
+
+            {/* <div className="row" style={{ justifyContent: 'center', alignItems: 'center' }}>
               {this.props.csvData ? this.props.csvData.map((eachItem) => {
                 return (
                   <div>
@@ -81,7 +93,7 @@ class OptionSelectModal extends React.Component {
                 )
               }
               ) : null}
-            </div>
+            </div> */}
           </Modal.Body>
           <Modal.Footer>
             <Button

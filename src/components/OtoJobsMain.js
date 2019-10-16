@@ -23,11 +23,8 @@ import Grid from '@material-ui/core/Grid';
 import Stepper from 'react-stepper-horizontal';
 import Table from "react-bootstrap/Table";
 import { withRouter } from "react-router-dom";
-
-
-/* import Dashboard from "./Dashboard" */
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-
+const bg = require("./bg2.jpg");
 
 var Papa = require("papaparse/papaparse.min.js");
 
@@ -246,7 +243,17 @@ class OtoJobsMain extends React.Component {
     console.log("udhfkdfsiughksdughkd", this.props.details)
     return (
 
-      <div className='container-fluid'>
+      <div className="container-fluid container-without-scroll wrapper"
+     
+      style={{
+        backgroundImage: `url(${bg})`,
+        width: "100%",
+        height: "100vh",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        overFlow:'hidden'
+      }}
+    >
         <>
           <LoadingOverlay
             active={this.state.isLoading}

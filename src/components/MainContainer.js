@@ -13,6 +13,21 @@ import LoadingOverlay from "react-loading-overlay";
 import LoadingBar from "react-top-loading-bar";
 import SideBar from "./sidebar";
 import Table from "react-bootstrap/Table";
+import lines from 'svg-patterns/p/lines';
+import stringify from 'virtual-dom-stringify';
+const bg = require("./bg.jpg");
+const divStyle = {
+  width: "100%",
+  height: "80%",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat"
+};
+const pattern = lines({
+  stroke: '#9c92ac',
+  background: '#dfdbe5',
+  orientations: [45]
+});
+
 var Papa = require("papaparse/papaparse.min.js");
 
 class MainContainer extends React.Component {
@@ -229,46 +244,24 @@ class MainContainer extends React.Component {
 
   render() {
     const { responseData } = this.state;
-    console.log("file re", this.state.file)
     return (
-      <div>
-        <>
-
-          <LoadingOverlay
-            active={this.state.isLoading}
-            className="loader-spiner"
-            spinner={true}
-            fadeSpeed={300}
-            text="Loading..."
-          >
-            {/*  <SideBar /> */}
+      <div className="container-flex container-without-scroll wrapper"
+     
+      style={{
+        backgroundImage: `url(${bg})`,
+        width: "100%",
+        height: "100vh",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        overFlow:'hidden'
+      }}
+    >
+ 
 
             <div
-              className={`container-fluid ${(this.state.isLoading &&
-                "container-without-scroll") || ""}`}>
+              className={`container-fluid `}>
 
-            {/*   <Navbar
-                style={{ background: 'rgba(53, 48, 48, 0.77)' }}
-
-                sticky="top"
-              >
-                <Navbar.Brand href="#home">
-                  <img
-                    alt=""
-                    src="./logo192.png"
-                    width="30"
-                    height="30"
-                    className="d-inline-block align-top"
-                  />
-                  <strong style={{ color: 'white' }}>&nbsp;Otomashen</strong>
-                </Navbar.Brand>
-                <Nav className="mr-auto">
-                  <Nav.Link style={{ color: 'white' }} href="#home">Home</Nav.Link>
-                  <Nav.Link style={{ color: 'white' }} href="#features">Otojobs</Nav.Link>
-                  <Nav.Link style={{ color: 'sky' }} href="#pricing"><strong>Dedupe</strong></Nav.Link>
-                </Nav>
-
-              </Navbar> */}
+            
               <LoadingBar
                 progress={this.state.loadingBarProgress}
                 height={7}
@@ -283,11 +276,13 @@ class MainContainer extends React.Component {
                     left: "50%",
                     top: "95%",
                     transform: "translate(-50%, -90%)",
-                    backgroundColor: 'rgba(14, 13, 13, 0.74)'
+                    backgroundColor: 'black'
                   }}
                   sticky="bottom"
                 >
+                   <br />
                   <Navbar.Collapse className="justify-content-end">
+                   
                     <Button
                       variant="primary"
                       disabled={
@@ -344,7 +339,9 @@ class MainContainer extends React.Component {
                       <span className=" fa fa-download "></span>
                       &nbsp;Export
                   </Button>
+                  
                   </Navbar.Collapse>
+                  <br/>
                 </Navbar>
               ) : null}
 
@@ -417,52 +414,28 @@ class MainContainer extends React.Component {
 
               )}
 
-              {/* <div
-                className="col-md-4 col-md-offset-4"
-                style={{
-                  position: "absolute",
-                  left: "50%",
-                  top: "70%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: 'rgba(14, 13, 13, 0.74)'
-                }}
-              >
-               <div className = "row">
-               {this.state.csvData ? this.state.csvData.map((eachItem) => {
-                return (
-                  <div>
-                    <div className="list-group-item" style={{ padding: '5px' }}>
-                      <input type="checkbox" onChange={() => this.handleClick(eachItem)} />
-                      <strong style={{ color: 'black' }}>{this.toProperCase(eachItem.replace("_", " "))} </strong>
+          
 
-                    </div>
-                    &nbsp;  &nbsp;
-                      </div>
-                )
-              }
-              ) : null}
-               </div>
-                </div> */}
-
-                <div className="row justify-content-md-center"></div>
-                <div>
+                <div >
                   {this.state.displayTable ? (
+                    <div className = "container-flex" style = {{overflowY:'scroll', maxHeight:'100vh'}}>
                     <ResultTable
                       data={responseData}
                       afterMerge={params => {
                         this.afterMerge(params);
                       }}
                     />
+                    </div>
                   ) : null}
                 </div>
               </div>
-          </LoadingOverlay>
+          
              <OptionSelectModal
               threshold={this.state.threshold}
               file={this.state.file}
               csvData={this.state.csvData}
             /> 
-        </>
+     
         </div>
         );
       }

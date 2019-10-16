@@ -22,6 +22,7 @@ import USMap from './us-states-map/index';
 import { interpolateRgb } from 'd3-interpolate';
 import { CircularProgressbar,buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+const bg = require("./bg3.jpg");
 
 var Papa = require("papaparse/papaparse.min.js");
 
@@ -118,7 +119,17 @@ class Dashboard extends React.Component {
         jobDetails.dashboardStats[0]) ||
       null;
     return (
-      <div className="container-fluid">
+      <div className="container-fluid "
+     
+      style={{
+        backgroundImage: `url(${bg})`,
+        width: "100%",
+        height: "100%",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        overFlow:'hidden'
+      }}
+    >
         <br />
         <div className="row " >
           <Col>
@@ -303,7 +314,7 @@ class Dashboard extends React.Component {
                     <DonutChart
                       height='550'
                       width='800'
-
+colors={[ '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#607d8b' ]}
                       data={finalObj} />
                   </div>
                 </div>

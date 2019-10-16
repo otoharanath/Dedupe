@@ -22,7 +22,7 @@ const divStyle = {
 const MainMenu = () => {
   return (
     <Navbar
-      style={{ background: 'rgba(53, 48, 48, 0.77)' }}
+      style={{ background: 'black' }}
 fluid
       sticky="top"
     >
@@ -56,7 +56,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div className="cComponent"
+       {/*  <div className="cComponent"
         style={divStyle}
         style={{
           backgroundImage: `url(${bg})`,
@@ -65,7 +65,7 @@ class App extends Component {
           backgroundSize: "cover",
           backgroundRepeat: "repeat-y"
         }}
-      >
+      > */}
           <header>
             <MainMenu />
           </header>
@@ -74,7 +74,7 @@ class App extends Component {
             <Route exact path="/Otojobs" component={OtoJobsMain} />
             <Route path="/dashboard/:tranId" component={Dashboard} /> 
           </div>
-        </div>
+       {/*  </div> */}
       </Router>
     );
   }
