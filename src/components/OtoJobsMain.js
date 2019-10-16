@@ -22,6 +22,11 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Stepper from 'react-stepper-horizontal';
 import Table from "react-bootstrap/Table";
+import { withRouter } from "react-router-dom";
+
+
+/* import Dashboard from "./Dashboard" */
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 
 var Papa = require("papaparse/papaparse.min.js");
@@ -34,7 +39,7 @@ class OtoJobsMain extends React.Component {
       boxColorValidate: [],
       boxColorFormatMain: [],
       boxColorFormatSub: [],
-      boxColorStandard:[],
+      boxColorStandard: [],
       file: null,
       displayTable: false,
       isLoading: false,
@@ -59,6 +64,8 @@ class OtoJobsMain extends React.Component {
     this.onClickNext = this.onClickNext.bind(this);
     this.onClickBack = this.onClickBack.bind(this);
     this.boxClick = this.boxClick.bind(this);
+    this.onClickFinish = this.onClickFinish.bind(this);
+    this.dashboardCall=this.dashboardCall.bind(this);
 
   }
 
@@ -191,10 +198,41 @@ class OtoJobsMain extends React.Component {
     }
 
 
-    
+
     this.forceUpdate();
   }
 
+  onClickFinish() {
+    let sendObject = {
+      customerId: 1,
+      action: {
+        append: this.state.boxColorAppend.length == 0 ? false : true,
+        standardize: this.state.boxColorStandard.length == 0 ? false : true,
+        validate: this.state.boxColorValidate.length == 0 ? false : true,
+        format: this.state.boxColorFormatMain.length == 0 ? false : true,
+        encryptFile: false,
+        selectedFields: this.state.boxColorAppend ? this.state.boxColorAppend.toString() :null,
+        formattingOptions: {
+          phone:this.state.boxColorFormatSub ? this.state.boxColorFormatSub.toString() :null
+        },
+        standardizeOptions: this.state.boxColorStandard ? this.state.boxColorStandard.toString() :null
+      },
+      files: this.state.file
+    }
+    this.props.OtoJobsActions.postTransaction(sendObject,this.state.file);
+    
+    
+  //  this.dashboardCall();
+    //this.props.transactionId  ? this.props.OtoJobsActions.getDetails(this.props.transactionId && this.props.transactionId.transactionId) :null;
+    this.forceUpdate();
+    //this.props.transactionId && this.props.history.push('/dashboard/'+this.props.transactionId.transactionId) 
+  }
+
+  dashboardCall() {
+    this.props.transactionId && this.props.history.push('/dashboard/'+this.props.transactionId.transactionId) 
+
+    //this.props.transactionId && this.props.history.push('/dashboard/'+this.props.transactionId && this.props.transactionId.transactionId) 
+  }
 
   render() {
 
@@ -204,7 +242,8 @@ class OtoJobsMain extends React.Component {
     let formattingOptions = this.props.optionData && this.props.optionData.message && this.props.optionData.message.formattingOptions
     let formattingOptionValues = String(this.props.optionData && this.props.optionData.message && this.props.optionData.message.formattingOptions && Object.values(this.props.optionData.message.formattingOptions)).split(',')
 
-    console.log("fsfs", formattingOptionValues)
+    console.log("fsfs", this.state.file)
+    console.log("udhfkdfsiughksdughkd", this.props.details)
     return (
 
       <div className='container-fluid'>
@@ -244,7 +283,7 @@ class OtoJobsMain extends React.Component {
                   />
                   <br />
                   {currentStep == 0 ?
-                    <FilePond onupdatefiles={(fileItems) => { this.setState({ file: fileItems[0] }); }} />
+                    <FilePond onupdatefiles={(fileItems) => { this.setState({ file: fileItems[0].file }); }} />
                     : null}
 
 
@@ -305,7 +344,7 @@ class OtoJobsMain extends React.Component {
                   {currentStep == 4 ?
                     <div style={{ width: '100%' }}>
                       <Box display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
-                        {["Phone","Email"].map((item) => {
+                        {["Phone", "Email"].map((item) => {
                           return (
                             <Box style={{ cursor: 'pointer' }} bgcolor={this.state.boxColorStandard.includes(item) ? "green" : "white"}
                               onClick={() => this.boxClick(item, "standard")} color={this.state.boxColorStandard.includes(item) ? "white" : "black"} p={1} m={0.5} display='flex'
@@ -318,9 +357,13 @@ class OtoJobsMain extends React.Component {
                   <br />
 
                   <Button disabled={currentStep == 0 ? true : false} onClick={this.onClickBack}>Back</Button>&nbsp;&nbsp;
-                    {steps.length == currentStep + 1 ? <Button   >Finish</Button> :
+                    {steps.length == currentStep + 1 ? <Button onClick={this.onClickFinish} >Finish</Button> :
                     <Button onClick={this.onClickNext}>Next</Button>}
-
+                    <br/>
+                    <br/>
+                    {this.props.transactionId &&  this.props.transactionId.transactionId != null ? 
+                     steps.length == currentStep + 1 ? <Button variant = "success" onClick={this.dashboardCall} >Dashboard</Button> : null
+:null}
 
                 </div>
               </div>
@@ -348,7 +391,10 @@ const mapStateToProps = (state, ownProps) => {
     initialTransaction: state.DedupeReducer.initialTransaction,
     currentVersion: state.DedupeReducer.currentVersion,
     active: state.DedupeReducer.active,
-    optionData: state.OtoJobsReducer.optionData
+
+    optionData: state.OtoJobsReducer.optionData,
+    transactionId:state.OtoJobsReducer.transactionId,
+    details:state.OtoJobsReducer.details
   };
 };
 
@@ -368,4 +414,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(OtoJobsMain);
+)(withRouter(OtoJobsMain));

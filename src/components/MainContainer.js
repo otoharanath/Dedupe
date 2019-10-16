@@ -229,6 +229,7 @@ class MainContainer extends React.Component {
 
   render() {
     const { responseData } = this.state;
+    console.log("file re", this.state.file)
     return (
       <div>
         <>

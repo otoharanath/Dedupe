@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import SideBar from './components/sidebar';
 import Navbar from "react-bootstrap/Navbar";
 import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
+import Dashboard from "./components/Dashboard"
+
+
 import './App.css';
 library.add(faEnvelope, faKey);
 const bg = require("./components/bg.jpg");
@@ -69,6 +72,7 @@ class App extends Component {
           <div>
             <Route exact path="/" component={MainContainer} />
             <Route exact path="/Otojobs" component={OtoJobsMain} />
+            <Route path="/dashboard/:tranId" component={Dashboard} /> 
           </div>
         </div>
       </Router>
