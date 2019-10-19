@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
-import MainContainer from './components/MainContainer';
-import OtoJobsMain from './components/OtoJobsMain';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import SideBar from './components/sidebar';
 import Navbar from "react-bootstrap/Navbar";
 import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
-import Dashboard from "./components/Dashboard"
+import { Link } from 'react-router-dom';
+import Router from './Router';
 
 
 import './App.css';
@@ -19,66 +18,80 @@ const divStyle = {
   backgroundSize: "cover",
   backgroundRepeat: "repeat"
 };
+
+
 const MainMenu = () => {
   return (
-    <Navbar
-      style={{ background: 'black' }}
-fluid
-      sticky="top"
-    >
+    <Navbar style={{ background: 'black' }} fluid sticky="top">
       <Navbar.Brand href="/">
         <img
           alt=""
           src="./logo192.png"
+          paddingTop = "20"
           width="30"
           height="30"
           className="d-inline-block align-top"
         />
-        <strong style={{ color: 'white' }}>&nbsp;Otomashen</strong>
+         <Navbar.Text style={{ color: 'white' }}>
+          <p style={{ color: 'white' }}><strong> Otomashen</strong></p>
+        </Navbar.Text>
+       
       </Navbar.Brand>
-    
+      
+
       <Nav className="mr-auto">
         <Nav.Link style={{ color: 'white' }} href="/">Home</Nav.Link>
         <Nav.Link style={{ color: 'white' }} href="/Otojobs">Otojobs</Nav.Link>
         <Nav.Link style={{ color: 'white' }} href="/">Dedupe</Nav.Link>
+       
       </Nav>
       <Navbar.Collapse className="justify-content-end">
-    <Navbar.Text style={{ color: 'white' }}>
-      Signed in as: <a style={{ color: 'white' }} href="/"><strong>Ashrin Mathur</strong></a>
-    </Navbar.Text>
-  </Navbar.Collapse>
+        <Navbar.Text style={{ color: 'white' }}>
+          Signed in as: <a style={{ color: 'white' }} href="/"><strong>Ashrin Mathur</strong></a>
+        </Navbar.Text>
+      </Navbar.Collapse>
     </Navbar>
   );
 };
 
 
-class App extends Component {
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      
+    };
+  
+    //this.onChange = this.onChange.bind(this);
+
+  }
+
   render() {
     return (
-      <Router>
-       {/*  <div className="cComponent"
-        style={divStyle}
-        style={{
-          backgroundImage: `url(${bg})`,
-          width: "100%",
-          height: "100%",
-          backgroundSize: "cover",
-          backgroundRepeat: "repeat-y"
-        }}
-      > */}
-          <header>
-            <MainMenu />
-          </header>
-          <div>
-            <Route exact path="/" component={MainContainer} />
-            <Route exact path="/Otojobs" component={OtoJobsMain} />
-            <Route path="/dashboard/:tranId" component={Dashboard} /> 
-          </div>
-       {/*  </div> */}
-      </Router>
+      <div>
+        <MainMenu />
+        <Router />
+      </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    isAuth: state.DedupeReducer.isAuth
+  };
+};
 
+// Maps actions to props
+const mapDispatchToProps = dispatch => {
+  return {
+
+  };
+};
+
+// Use connect to put them together
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

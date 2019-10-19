@@ -363,6 +363,7 @@ class MainContainer extends React.Component {
                       &nbsp;&nbsp;
                       <div className="input-group-prepend">
                         <span
+                        style={{ cursor: 'pointer' }}
                           onClick={this.onFormSubmit}
                           className="input-group-text"
                           id="inputGroupFileAddon01"
@@ -418,7 +419,7 @@ class MainContainer extends React.Component {
 
                 <div >
                   {this.state.displayTable ? (
-                    <div className = "container-flex" style = {{overflowY:'scroll', maxHeight:'100vh'}}>
+                    <div className = "container-flex" style = {{overflowY:'scroll', maxHeight:'80vh'}}>
                     <ResultTable
                       data={responseData}
                       afterMerge={params => {

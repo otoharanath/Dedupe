@@ -7,7 +7,8 @@ import {
   FETCH_TABLE_DATA_PERCENTAGE,
   INITIAL_TRANSACTION,
   CURRENT_VERSION,
-  SHOW_SELECT_MODAL
+  SHOW_SELECT_MODAL,
+  IS_AUTH
 } from '.';
 
 let actions = {
@@ -26,6 +27,10 @@ let actions = {
   afterMergeSave: finalData => ({
     type: AFTER_MERGE_SAVE,
     data: finalData
+  }),
+  isAuth: auth => ({
+    type: IS_AUTH,
+    data: auth
   }),
   globalResponse: data => ({
     type: GLOBAL_RESPONSE,

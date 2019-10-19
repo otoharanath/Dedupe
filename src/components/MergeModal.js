@@ -19,7 +19,8 @@ class MergeModal extends React.Component {
         matchedIds : [],
         function : 'merge',
         finalRecord : {},
-        timestamp : Date.now()
+        timestamp : Date.now(),
+        checkNumber:0
       },
       sendData: {}
     };
@@ -30,6 +31,7 @@ class MergeModal extends React.Component {
       inProgress: false
     })
     this.props.DedupeActions.setShowModal(false);
+    this.forceUpdate();
   };
 
   selectedValue = (value, key, index, isInput = false) => {
@@ -62,6 +64,7 @@ class MergeModal extends React.Component {
   createRows() {
     const { rows } = this.props;
     const rowsData = rows.rows;
+    
     const columns =
       rowsData && rowsData.length && Object.keys(rowsData[0].data);
     const { finalData,sendData } = this.state;
@@ -70,6 +73,7 @@ class MergeModal extends React.Component {
       columns &&
       columns.length &&
       columns.map((key, index) => {
+        
         finalData[key] = finalData[key] || {
           value: '',
           isInput: false,
@@ -81,10 +85,12 @@ class MergeModal extends React.Component {
           
         return (
           <tr key={index}>
-            <th>{this.getHeader(columns[index])}</th>
+            <th style={{ backgroundColor: 'black' }}>{this.getHeader(columns[index])}</th>
             {rowsData.map((row, idx) => {
+              
               return (
-                <td
+               
+                <td style={{ cursor: 'pointer' }}
                   className={
                     (!finalData[key].isInput &&
                       finalData[key].index === idx &&
@@ -98,9 +104,10 @@ class MergeModal extends React.Component {
                 >
                   {row['data'][key]}
                 </td>
+             
               );
             })}
-            <td
+            <td style={{ cursor: 'pointer' }}
               className={
                 (finalData[key].isInput &&
                   finalData[key].index === -1 &&
@@ -115,29 +122,16 @@ class MergeModal extends React.Component {
               />
             </td>
           </tr>
+         
         );
       })
+     
     );
   }
 
   onSave = () => {
     const { finalData,sendData, isValid } = this.state;
 
-  /*   this.setState({
-      inProgress: true
-    })
-    const { finalData, isValid } = this.state;
-    const {
-      rows: { afterMerge, markDisabledAllMergeButtons }
-    } = this.props;
-
-    if (isValid) {
-      afterMerge({
-        finalData,
-        rows: this.props.rows.rows,
-        unCheckedIds: this.props.rows.unCheckedIds
-      });
-      markDisabledAllMergeButtons() */
       let stringified = JSON.stringify(sendData)
       
         this.state.actionData.primaryId = this.props.rows && this.props.rows.rows && this.props.rows.rows[0] && this.props.rows.rows[0].id
@@ -149,7 +143,7 @@ class MergeModal extends React.Component {
   let finalSend = JSON.stringify(this.state.actionData)
     let tid = this.props.initialTransaction
 
-    console.log("before",finalSend)
+    //console.log("before",finalSend)
     //console.log("after",JSON.stringify(JSON.stringify(sendData)))
 
    this.props.DedupeActions.updateTransaction(finalSend,tid)
@@ -163,6 +157,7 @@ class MergeModal extends React.Component {
   
 
   render() {
+
     return (
       <div>
         <Modal 
@@ -180,7 +175,15 @@ class MergeModal extends React.Component {
               <thead>
                 <tr></tr>
               </thead>
-              <tbody>{this.createRows()}</tbody>
+              <tbody>
+                <tr>
+                  <td style={{ backgroundColor: 'black' }}>Fields</td>
+                  <td style={{ backgroundColor: 'black' }}>Original Record</td>
+                  <td colspan = {this.props.rows && this.props.rows.rows && this.props.rows.rows.length -1} style={{ backgroundColor: 'black' }}>Matches</td>
+                  <td style={{ backgroundColor: 'black' }}>Custom Input</td>
+                </tr>
+              {this.createRows()}
+              </tbody>
             </Table>
           </Modal.Body>
           <Modal.Footer>

@@ -6,7 +6,8 @@ import { AFTER_MERGE_SAVE,
   FETCH_TABLE_DATA_PERCENTAGE,
   INITIAL_TRANSACTION,
   CURRENT_VERSION,
-  SHOW_SELECT_MODAL
+  SHOW_SELECT_MODAL,
+  IS_AUTH
 } from '../actions';
 
 const InitialState = {
@@ -17,7 +18,8 @@ const InitialState = {
   responseData: {},
   initialTransaction: {},
   currentVersion:{},
-  active:{}
+  active:{},
+  isAuth:false
 };
 
 let DedupeReducer = function (state = InitialState, action) {
@@ -33,6 +35,9 @@ let DedupeReducer = function (state = InitialState, action) {
 
     case AFTER_MERGE_SAVE:
       return Object.assign({}, state, { finalData: action.data });
+
+      case IS_AUTH:
+        return Object.assign({}, state, { isAuth: action.data });
 
     case GLOBAL_RESPONSE:
       return Object.assign({}, state, { inputResponse: action.data });
