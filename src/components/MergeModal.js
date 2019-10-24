@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import DedupeActions from '../actions/DedupeActions';
 import Modal from 'react-bootstrap/Modal';
@@ -19,11 +18,14 @@ class MergeModal extends React.Component {
         matchedIds : [],
         function : 'merge',
         finalRecord : {},
+        selectedMatches : {},
         timestamp : Date.now(),
-        checkNumber:0
+        //checkNumber:0
       },
-      sendData: {}
+      sendData: {},
+      sendId: {}
     };
+    this.onSave = this.onSave.bind(this);
   }
 
   closePopUp = () => {
@@ -34,13 +36,16 @@ class MergeModal extends React.Component {
     this.forceUpdate();
   };
 
-  selectedValue = (value, key, index, isInput = false) => {
-    const { finalData, sendData } = this.state;
+  selectedValue = (id, value, key, index, isInput = false) => {
+    const { finalData, sendData, sendId } = this.state;
     //const { sendData } = this.state;
+    
     finalData[key]['value'] = value;
     finalData[key]['isInput'] = isInput;
     finalData[key]['index'] = index;
+    finalData[key]['id'] = id;
     sendData[key] = value;
+    sendId[key] = id;
 
     const inValidFields = Object.keys(finalData).filter(
       key => !finalData[key].value
@@ -87,7 +92,7 @@ class MergeModal extends React.Component {
           <tr key={index}>
             <th style={{ backgroundColor: 'black' }}>{this.getHeader(columns[index])}</th>
             {rowsData.map((row, idx) => {
-              
+             
               return (
                
                 <td style={{ cursor: 'pointer' }}
@@ -98,7 +103,7 @@ class MergeModal extends React.Component {
                     ''
                   }
                   onClick={e => {
-                    this.selectedValue(row['data'][key], key, idx);
+                    this.selectedValue(row['id'],row['data'][key], key, idx);
                   }}
                   key={idx}
                 >
@@ -117,7 +122,7 @@ class MergeModal extends React.Component {
             >
               <input className = "modal-input"
                 onChange={({ target: { value } }) =>
-                  this.selectedValue(value, key, -1, true)
+                  this.selectedValue(null, value, key, -1, true)
                 }
               />
             </td>
@@ -130,14 +135,30 @@ class MergeModal extends React.Component {
   }
 
   onSave = () => {
-    const { finalData,sendData, isValid } = this.state;
+    const { sendData,sendId } = this.state;
 
+      sendId && Object.keys(sendId).map((each) => {
+        if(sendId[each] === null)
+        sendId[each] = "custom"  
+    })
+   
       let stringified = JSON.stringify(sendData)
-      
+      let stringifiedIds = JSON.stringify(sendId)
+      /* this.setState({
+        actionData : {
+          primaryId : this.props.rows && this.props.rows.rows && this.props.rows.rows[0] && this.props.rows.rows[0].id,
+          matchedIds : this.props.rows && this.props.rows.rows && this.props.rows.rows.slice(1).map((ids) => ids.id),
+          function : 'merge',
+          finalRecord : stringified,
+          finalRecordIds : stringifiedIds,
+          timestamp : Date.now()
+        }
+      }) */
         this.state.actionData.primaryId = this.props.rows && this.props.rows.rows && this.props.rows.rows[0] && this.props.rows.rows[0].id
         this.state.actionData.matchedIds = this.props.rows && this.props.rows.rows && this.props.rows.rows.slice(1).map((ids) => ids.id)
         this.state.actionData.function = 'merge'
         this.state.actionData.finalRecord = stringified
+        this.state.actionData.selectedMatches = stringifiedIds
         this.state.actionData.timestamp = Date.now()
     
   let finalSend = JSON.stringify(this.state.actionData)
@@ -179,7 +200,7 @@ class MergeModal extends React.Component {
                 <tr>
                   <td style={{ backgroundColor: 'black' }}>Fields</td>
                   <td style={{ backgroundColor: 'black' }}>Original Record</td>
-                  <td colspan = {this.props.rows && this.props.rows.rows && this.props.rows.rows.length -1} style={{ backgroundColor: 'black' }}>Matches</td>
+                  <td colSpan = {this.props.rows && this.props.rows.rows && this.props.rows.rows.length -1} style={{ backgroundColor: 'black' }}>Matches</td>
                   <td style={{ backgroundColor: 'black' }}>Custom Input</td>
                 </tr>
               {this.createRows()}

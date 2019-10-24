@@ -3,18 +3,17 @@ import { connect } from "react-redux";
 import Button from "react-bootstrap/Button";
 import OptionSelectModal from "./OptionSelectModal";
 import Navbar from "react-bootstrap/Navbar";
-import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
+//import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
 import ResultTable from "./ResultTable";
 import DedupeActions from "../actions/DedupeActions";
 import { bindActionCreators } from "redux";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
-import LoadingOverlay from "react-loading-overlay";
+//import LoadingOverlay from "react-loading-overlay";
 import LoadingBar from "react-top-loading-bar";
-import SideBar from "./sidebar";
-import Table from "react-bootstrap/Table";
+//import Table from "react-bootstrap/Table";
 import lines from 'svg-patterns/p/lines';
-import stringify from 'virtual-dom-stringify';
+//import stringify from 'virtual-dom-stringify';
 const bg = require("./bg.jpg");
 const divStyle = {
   width: "100%",
@@ -244,6 +243,7 @@ class MainContainer extends React.Component {
 
   render() {
     const { responseData } = this.state;
+    console.log("response data", responseData)
     return (
       <div className="container-flex container-without-scroll wrapper"
      

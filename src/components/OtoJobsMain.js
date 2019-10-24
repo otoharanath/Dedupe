@@ -12,7 +12,6 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
 import LoadingOverlay from "react-loading-overlay";
 import LoadingBar from "react-top-loading-bar";
-import SideBar from "./sidebar";
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
 import Container from '@material-ui/core/Container';

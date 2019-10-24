@@ -5,10 +5,10 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Navbar from "react-bootstrap/Navbar";
-import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
-import { isUserWhitespacable } from '@babel/types';
-import Checkbox from 'react-simple-checkbox';
+//import Navbar from "react-bootstrap/Navbar";
+//import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
+//import { isUserWhitespacable } from '@babel/types';
+//import Checkbox from 'react-simple-checkbox';
 
 
 
@@ -19,16 +19,6 @@ const divStyle = {
   backgroundSize: "cover",
   backgroundRepeat: "repeat"
 };
-
-const ColoredLine = ({ color }) => (
-  <hr
-      style={{
-          color: color,
-          backgroundColor: color,
-          height: 5
-      }}
-  />
-);
 
 class ResultTable extends React.Component {
   constructor(props) {
@@ -44,7 +34,7 @@ class ResultTable extends React.Component {
       searchTerm:null
     };
     this.getRowsData = this.getRowsData.bind(this);
-    this.handleSearch  = this.handleSearch.bind(this);
+    //this.handleSearch  = this.handleSearch.bind(this);
   }
 
   componentDidMount() {
@@ -187,7 +177,7 @@ class ResultTable extends React.Component {
   getRowsData = () => {
     const items = this.props.data;
     const buttonstyle = { paddingTop: '5%' };
-    let fil =[]
+    /* let fil =[]
     if(!(this.state.searchTerm === null)){
       
     
@@ -203,8 +193,8 @@ class ResultTable extends React.Component {
    )
     }
    let final = fil.length === 0 ? items : fil
-   console.log("yoyoyoy",fil)
-    return final.map((row, index) => {
+   console.log("yoyoyoy",fil) */
+    return items.map((row, index) => {
       const user = JSON.parse(row.data);
       let yoyo = [];
       yoyo = Object.keys(user);
@@ -216,11 +206,11 @@ class ResultTable extends React.Component {
         <tr key={index}>
           {/* <td>{row.id}</td> */}
           <td>
-            <Table className = "ui  table"  >
+            <Table className = "ui table"  >
               <thead>
 
                 <tr>
-                  <th  ><strong style={{color: "black" }}>ID</strong></th>
+                  <th><strong style={{color: "black" }}>ID</strong></th>
                   {
                     yoyo.map((heads) => {
                       return <th style={{color: "black" }}><strong style={{color: "black" }}>{this.toProperCase(heads.replace("_", " "))}</strong></th>
@@ -260,14 +250,14 @@ class ResultTable extends React.Component {
                   if (!parsed) return <></>
                   let dynamicMatch = Object.values(parsed);
                   return (
-                    <tr style={{backgroundColor: this.getColor(b.rating.toFixed(2)) }} key={index1}>
+                    <tr key={index1}>
                       <td style = {{color:"black"}}>{b.index}</td>
                       {dynamicMatch.map((heads) => {
                         return <td style = {{color:"black"}}>{heads}</td>
                       })
                       }
 
-                      <td style = {{color:"black"}}>{b.rating.toFixed(2)}</td>
+                      <td style = {{color:"black", backgroundColor: this.getColor(b.rating.toFixed(2))}}>{b.rating.toFixed(2)}</td>
                       <td>
                         {this.action(row.id, b, parsed)}
                         &nbsp;
@@ -300,14 +290,14 @@ class ResultTable extends React.Component {
       
     });
   };
-handleSearch(event){
+/* handleSearch(event){
   this.setState({
   searchTerm: event.target.value
   }) 
 }
 searchCl(){
   this.forceUpdate();
-}
+} */
   render() {
     console.log("selected",this.state.checkLength)
     return (
@@ -327,11 +317,7 @@ searchCl(){
           <thead>
             <tr>
               {/*  <th>ID</th> */}
-              <th className = "col-md-10">Data With Matches &nbsp;&nbsp;&nbsp;
-              <strong>First Name</strong>&nbsp;<input type="text" name="searchTerm" value = {this.state.searchTerm || ""} onChange = {this.handleSearch}/>&nbsp;&nbsp;&nbsp;
-              <strong>Last Name</strong>&nbsp;<input type="text" name="searchTerm" value = {this.state.searchTerm || ""} onChange = {this.handleSearch}/>&nbsp;&nbsp;&nbsp;
-              <strong>Company Name</strong>&nbsp;<input type="text" name="searchTerm" value = {this.state.searchTerm || ""} onChange = {this.handleSearch}/></th>
-              {/*  <th>Matches</th> */}
+              <th className = "col-md-10">Data With Matches</th>
               <th className = "col-md-2">Actions</th>
             </tr>
           </thead>
