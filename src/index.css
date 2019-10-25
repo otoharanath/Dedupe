@@ -88,6 +88,24 @@ code {
   background: green;
 }
 
+.color-nonDedupe span {
+  width: 100%;
+  display: block;
+  text-align: center;
+  background: rgba(25, 29, 26, 0.699);
+  padding: 15px;
+}
+
+.modal-dialog .table-bordered td.color-nonDedupe {
+  background: rgb(19, 22, 20);
+  color: rgb(116, 119, 117);
+}
+
+.modal-dialog .table-bordered th.color-nonDedupe {
+  background: rgb(19, 22, 20);
+  color: rgb(116, 119, 117);
+}
+
 .modal-input {
   border: 1px solid #454d55;
   vertical-align: middle;

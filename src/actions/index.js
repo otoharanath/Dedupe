@@ -11,3 +11,4 @@ export const OJ_OPTION_DATA = 'OJ_OPTION_DATA';
 export const OJ_TRANSACTION_ID = 'OJ_TRANSACTION_ID';
 export const OJ_DETAILS = 'OJ_DETAILS';
 export const IS_AUTH = 'IS_AUTH';
+export const DEDUPE_COLUMNS = 'DEDUPE_COLUMNS';

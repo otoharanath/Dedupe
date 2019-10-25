@@ -206,7 +206,7 @@ class ResultTable extends React.Component {
         <tr key={index}>
           {/* <td>{row.id}</td> */}
           <td>
-            <Table className = "ui table"  >
+            <Table style={{ tableLayout: 'auto' }} className = "ui table"  >
               <thead>
 
                 <tr>

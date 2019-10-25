@@ -69,15 +69,19 @@ class MergeModal extends React.Component {
   createRows() {
     const { rows } = this.props;
     const rowsData = rows.rows;
-    
+    let copy = rows.rows &&  rows.rows[0]
+    //copy && console.log("rowsDta",copy[0])
     const columns =
       rowsData && rowsData.length && Object.keys(rowsData[0].data);
+    const nonDedupe = columns && columns.filter((each) => !this.props.dedupeColumns.includes(each))
+   
     const { finalData,sendData } = this.state;
-
+    
     return (
       columns &&
       columns.length &&
       columns.map((key, index) => {
+        let bgcol= nonDedupe.includes(key) ? "color-nonDedupe" : null
         
         finalData[key] = finalData[key] || {
           value: '',
@@ -87,20 +91,30 @@ class MergeModal extends React.Component {
         sendData[key] = sendData[key] || {
           value: ''
         }
-          
+       
         return (
-          <tr key={index}>
-            <th style={{ backgroundColor: 'black' }}>{this.getHeader(columns[index])}</th>
-            {rowsData.map((row, idx) => {
-             
+          <tr key={index} >
+            <th className = {bgcol ? bgcol : ''}
+            style={{ backgroundColor: 'black'}}>{this.getHeader(columns[index])}</th>
+               {rowsData.map((row, idx) => {
+               let perfectMatch = false
+               let isMain = false
+               if(row['data'][key] === copy['data'][key])
+               perfectMatch = true
+               if(row['index'] === -1)
+               isMain =true
+
+              let finalBorder = false
+              
+              if(perfectMatch && !isMain && !bgcol=='')
+              finalBorder = true
+       
               return (
-               
-                <td style={{ cursor: 'pointer' }}
+                <td style={{ cursor: 'pointer', border: finalBorder ? '3px solid green' :null}}
                   className={
                     (!finalData[key].isInput &&
                       finalData[key].index === idx &&
-                      'color-green') ||
-                    ''
+                      'color-green') || (bgcol ? bgcol : '')  
                   }
                   onClick={e => {
                     this.selectedValue(row['id'],row['data'][key], key, idx);
@@ -116,8 +130,8 @@ class MergeModal extends React.Component {
               className={
                 (finalData[key].isInput &&
                   finalData[key].index === -1 &&
-                  'color-green') ||
-                ''
+                  'color-green') || (bgcol ? bgcol : '')
+               
               }
             >
               <input className = "modal-input"
@@ -178,7 +192,7 @@ class MergeModal extends React.Component {
   
 
   render() {
-
+//console.log("dedupe colummns", this.props.dedupeColumns)
     return (
       <div>
         <Modal 
@@ -238,7 +252,8 @@ function mapStateToProps(state) {
   return {
     showDedupe: state.DedupeReducer.showDedupe,
     rows: state.DedupeReducer.rows,
-    initialTransaction:state.DedupeReducer.initialTransaction
+    initialTransaction:state.DedupeReducer.initialTransaction,
+    dedupeColumns:state.DedupeReducer.dedupeColumns
   };
 }
 

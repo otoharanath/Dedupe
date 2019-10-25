@@ -8,7 +8,8 @@ import {
   INITIAL_TRANSACTION,
   CURRENT_VERSION,
   SHOW_SELECT_MODAL,
-  IS_AUTH
+  IS_AUTH,
+  DEDUPE_COLUMNS
 } from '.';
 
 let actions = {
@@ -34,6 +35,10 @@ let actions = {
   }),
   globalResponse: data => ({
     type: GLOBAL_RESPONSE,
+    data: data
+  }),
+  dedupeColumns: data => ({
+    type: DEDUPE_COLUMNS,
     data: data
   }),
   postTransaction: (body) => {

@@ -43,6 +43,7 @@ class OptionSelectModal extends React.Component {
     form.append('threshold', this.props.threshold);
     form.append('selectedFields', this.state.selectedOptions.toString());
     this.props.DedupeActions.setShowSelectModal(false);
+    this.props.DedupeActions.dedupeColumns(this.state.selectedOptions);
     this.props.DedupeActions.postTransaction(form)
     this.state.selectedOptions = []
   }

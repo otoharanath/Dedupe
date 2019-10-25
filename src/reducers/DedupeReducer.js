@@ -7,7 +7,8 @@ import { AFTER_MERGE_SAVE,
   INITIAL_TRANSACTION,
   CURRENT_VERSION,
   SHOW_SELECT_MODAL,
-  IS_AUTH
+  IS_AUTH,
+  DEDUPE_COLUMNS
 } from '../actions';
 
 const InitialState = {
@@ -19,7 +20,8 @@ const InitialState = {
   initialTransaction: {},
   currentVersion:{},
   active:{},
-  isAuth:false
+  isAuth:false,
+  dedupeColumns : []
 };
 
 let DedupeReducer = function (state = InitialState, action) {
@@ -41,6 +43,9 @@ let DedupeReducer = function (state = InitialState, action) {
 
     case GLOBAL_RESPONSE:
       return Object.assign({}, state, { inputResponse: action.data });
+
+      case DEDUPE_COLUMNS:
+      return Object.assign({}, state, { dedupeColumns: action.data });
 
       case INITIAL_TRANSACTION:
         return Object.assign({}, state, { initialTransaction: action.initialTransaction });
