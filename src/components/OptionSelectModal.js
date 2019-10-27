@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-
 import Button from 'react-bootstrap/Button';
 import DedupeActions from '../actions/DedupeActions';
 import Modal from 'react-bootstrap/Modal';
-import Table from 'react-bootstrap/Table';
+import ToggleButton from 'react-toggle-button'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Box from '@material-ui/core/Box';
-//import { threadId } from 'worker_threads';
 class OptionSelectModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedOptions: [],
-      colorOption: {}
+      colorOption: {},
+      toggle: false
     };
+    this.onSave = this.onSave.bind(this);
   }
 
   closePopUp = () => {
@@ -44,7 +44,11 @@ class OptionSelectModal extends React.Component {
     form.append('selectedFields', this.state.selectedOptions.toString());
     this.props.DedupeActions.setShowSelectModal(false);
     this.props.DedupeActions.dedupeColumns(this.state.selectedOptions);
+    this.state.toggle ? 
+    this.props.DedupeActions.postTransactionExactMatch(form)
+    :
     this.props.DedupeActions.postTransaction(form)
+
     this.state.selectedOptions = []
   }
   render() {
@@ -68,33 +72,32 @@ class OptionSelectModal extends React.Component {
             <Modal.Title>Select Dedupe Options</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <div style={{ width: '100%' }}>
-                      <Box display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
-                        {this.props.csvData.map((item) => {
-                          return (
-                            <Box style={{ cursor: 'pointer' }} bgcolor={this.state.selectedOptions.includes(item) ? "green" : "white"}
-                              onClick={() => this.handleClick(item)} color={this.state.selectedOptions.includes(item) ? "white" : "black"} p={1} m={0.5} display='flex'
-                              justifyContent='center'>{this.toProperCase(item.replace("_", " "))}</Box>)
-                        })
-                        }
-                      </Box>
-                    </div>
+            <div className="row pull-right">
+              <br/>
+              <strong>Exact Match</strong>&nbsp;
+            <ToggleButton
+                value={this.state.toggle || false}
+                onToggle={(value) => {
+                  this.setState({
+                    toggle: !value
+                  })
+                }} />
+            </div>
+            <br />
+            <br />
+            <div className="row">
+              <Box display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
+                {this.props.csvData.map((item) => {
+                  return (
+                    <Box style={{ cursor: 'pointer' }} bgcolor={this.state.selectedOptions.includes(item) ? "green" : "white"}
+                      onClick={() => this.handleClick(item)} color={this.state.selectedOptions.includes(item) ? "white" : "black"} p={1} m={0.5} display='flex'
+                      justifyContent='center'>{this.toProperCase(item.replace("_", " "))}</Box>)
+                })
+                }
+              </Box>
+            </div>
 
-            {/* <div className="row" style={{ justifyContent: 'center', alignItems: 'center' }}>
-              {this.props.csvData ? this.props.csvData.map((eachItem) => {
-                return (
-                  <div>
-                    <div className="list-group-item" style={{ padding: '5px' }}>
-                      <input type="checkbox" onChange={() => this.handleClick(eachItem)} />
-                      <strong style={{ color: 'black' }}>{this.toProperCase(eachItem.replace("_", " "))} </strong>
 
-                    </div>
-                    &nbsp;  &nbsp;
-                      </div>
-                )
-              }
-              ) : null}
-            </div> */}
           </Modal.Body>
           <Modal.Footer>
             <Button

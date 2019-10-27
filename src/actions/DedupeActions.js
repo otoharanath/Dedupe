@@ -64,6 +64,31 @@ let actions = {
         
     };
   },
+
+  postTransactionExactMatch: (body) => {
+    return function (dispatch) {
+
+      fetch('https://otobots.otomashen.com:6969/dedupe/postTransactionExact', {
+        method: 'POST',
+        body
+      })
+        .then((data) => (data.json()))      
+        .then((data) => {
+
+          dispatch({
+            type: INITIAL_TRANSACTION,
+            initialTransaction: (
+              data
+            )
+          })
+          getTransactionState(data, dispatch);
+
+        })
+       
+        
+    };
+  },
+  
   getTransactionStateUndoRedo : (data) => {
     return function (dispatch) {
     const fd = new FormData();
