@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import DedupeActions from '../actions/DedupeActions';
 import Modal from 'react-bootstrap/Modal';
-import ToggleButton from 'react-toggle-button'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Box from '@material-ui/core/Box';
@@ -44,7 +43,7 @@ class OptionSelectModal extends React.Component {
     form.append('selectedFields', this.state.selectedOptions.toString());
     this.props.DedupeActions.setShowSelectModal(false);
     this.props.DedupeActions.dedupeColumns(this.state.selectedOptions);
-    this.state.toggle ? 
+    this.props.toggle ? 
     this.props.DedupeActions.postTransactionExactMatch(form)
     :
     this.props.DedupeActions.postTransaction(form)
@@ -72,19 +71,8 @@ class OptionSelectModal extends React.Component {
             <Modal.Title>Select Dedupe Options</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="row pull-right">
-              <br/>
-              <strong>Exact Match</strong>&nbsp;
-            <ToggleButton
-                value={this.state.toggle || false}
-                onToggle={(value) => {
-                  this.setState({
-                    toggle: !value
-                  })
-                }} />
-            </div>
-            <br />
-            <br />
+           
+           
             <div className="row">
               <Box display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
                 {this.props.csvData.map((item) => {

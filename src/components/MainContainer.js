@@ -12,6 +12,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 //import LoadingOverlay from "react-loading-overlay";
 import LoadingBar from "react-top-loading-bar";
 //import Table from "react-bootstrap/Table";
+import ToggleButton from 'react-toggle-button'
 import lines from 'svg-patterns/p/lines';
 //import stringify from 'virtual-dom-stringify';
 const bg = require("./bg.jpg");
@@ -41,6 +42,7 @@ class MainContainer extends React.Component {
       fileName: "Choose File",
       downloadFile: null,
       csvData: [],
+      toggle:false,
       thresholdValues: [
         0.5,
         0.55,
@@ -357,6 +359,21 @@ class MainContainer extends React.Component {
                   }}
                 >
                   <br />
+                  <div className="row pull-left">
+             
+              &nbsp; &nbsp; &nbsp; &nbsp;
+              <strong style={{color:"white"}}>Exact Match</strong>&nbsp;
+            <ToggleButton
+                value={this.state.toggle || false}
+                onToggle={(value) => {
+                  this.setState({
+                    toggle: !value
+                  })
+                }} />
+                
+            </div>
+                  <br />
+                  <br />
                   <div className="row">
 
                     <div className="input-group col-md-9">
@@ -390,6 +407,7 @@ class MainContainer extends React.Component {
                     </div>
                     <div className="col-md-3">
                       <DropdownButton
+                        disabled = {this.state.toggle}
                         size="md"
                         id="dropdown-item-button"
                         title={this.state.threshold}
@@ -432,6 +450,7 @@ class MainContainer extends React.Component {
               </div>
           
              <OptionSelectModal
+              toggle={this.state.toggle}
               threshold={this.state.threshold}
               file={this.state.file}
               csvData={this.state.csvData}
