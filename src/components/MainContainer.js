@@ -9,7 +9,7 @@ import DedupeActions from "../actions/DedupeActions";
 import { bindActionCreators } from "redux";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
-//import LoadingOverlay from "react-loading-overlay";
+import LoadingOverlay from "react-loading-overlay";
 import LoadingBar from "react-top-loading-bar";
 //import Table from "react-bootstrap/Table";
 import ToggleButton from 'react-toggle-button'
@@ -174,6 +174,7 @@ class MainContainer extends React.Component {
           isLoading: false,
           loadingBarProgress: 0
         });
+       
       }, 300);
     } else {
       this.setState({
@@ -184,6 +185,7 @@ class MainContainer extends React.Component {
 
   onLoaderFinished = () => {
     this.setState({ loadingBarProgress: 0 });
+    this.props.history.push('/dedupeTable');
   };
 
   undoAction() {
@@ -246,108 +248,32 @@ class MainContainer extends React.Component {
   render() {
     const { responseData } = this.state;
     console.log("response data", responseData)
+    let isTrue = false
     return (
-      <div className="container-flex container-without-scroll wrapper"
-     
-      style={{
+      <div className="container-fluid" >
+   <div  style={{
+    top:"0",
+    left: "0",
+    width:"100%",
+    height:"100%",
+    position:"absolute",
         backgroundImage: `url(${bg})`,
-        width: "100%",
-        height: "100vh",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        overFlow:'hidden'
-      }}
-    >
- 
-
-            <div
-              className={`container-fluid `}>
-
-            
-              <LoadingBar
+        backgroundAttachment: "fixed",
+        overflow:"hidden"
+       
+       }}/>
+   
+    
+        <LoadingBar
                 progress={this.state.loadingBarProgress}
                 height={7}
                 color="red"
                 onLoaderFinished={() => this.onLoaderFinished()}
               />
-              {this.state.displayTable ? (
-                <Navbar
 
-                  style={{
-                    position: "fixed",
-                    left: "50%",
-                    top: "95%",
-                    transform: "translate(-50%, -90%)",
-                    backgroundColor: 'black'
-                  }}
-                  sticky="bottom"
-                >
-                   <br />
-                  <Navbar.Collapse className="justify-content-end">
-                   
-                    <Button
-                      variant="primary"
-                      disabled={
-                        this.props.initialTransaction &&
-                          this.props.initialTransaction.version == 0 &&
-                          this.props.initialTransaction
-                          ? true
-                          : false
-                      }
-
-                      size="sm"
-                      style={{ color: "#FFF" }}
-                      onClick={this.undoAction}
-                    >
-                      <span className=" fa fa-undo "></span>
-                      &nbsp;Undo
-                  </Button>
-                    &nbsp;  &nbsp;
-  
-                  <Button
-                      variant="primary"
-
-                      size="sm"
-                      style={{ color: "#FFF" }}
-                      disabled={
-                        (this.props.initialTransaction &&
-                          this.props.initialTransaction.version) <
-                          (this.props.currentVersion &&
-                            this.props.currentVersion.version)
-                          ? false
-                          : true
-                      }
-                      onClick={this.redoAction}
-                    >
-                      <span className=" fa fa-repeat "></span>
-                      &nbsp;Redo
-                  </Button>
-                    &nbsp;  &nbsp;
-                  <Button
-                      variant="success"
-
-                      size="sm"
-                      style={{ color: "#FFF" }}
-                      disabled={
-                        this.props.initialTransaction &&
-                          this.props.initialTransaction.version == 0
-                          ? true
-                          : false
-                      }
-                      onClick={() =>
-                        this.exportExcel(this.props.initialTransaction)
-                      }
-                    >
-                      <span className=" fa fa-download "></span>
-                      &nbsp;Export
-                  </Button>
-                  
-                  </Navbar.Collapse>
-                  <br/>
-                </Navbar>
-              ) : null}
-
-              {this.state.displayTable ? null : (
+            {this.state.displayTable ? null :
                 <div
                   className="col-md-4 col-md-offset-4"
                   style={{
@@ -358,6 +284,7 @@ class MainContainer extends React.Component {
                     backgroundColor: 'rgba(14, 13, 13, 0.74)'
                   }}
                 >
+                
                   <br />
                   <div className="row pull-left">
              
@@ -429,34 +356,24 @@ class MainContainer extends React.Component {
 
                   </div>
                   <br />
+                 
                 </div>
+            }
 
-              )}
-
-          
-
-                <div >
-                  {this.state.displayTable ? (
-                    <div className = "container-flex" style = {{overflowY:'scroll', maxHeight:'80vh'}}>
-                    <ResultTable
-                      data={responseData}
-                      afterMerge={params => {
-                        this.afterMerge(params);
-                      }}
-                    />
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-          
-             <OptionSelectModal
+                    
+                    
+                
+          <OptionSelectModal
               toggle={this.state.toggle}
               threshold={this.state.threshold}
               file={this.state.file}
               csvData={this.state.csvData}
             /> 
-     
+   
+  
         </div>
+       
+        
         );
       }
     }
@@ -464,11 +381,12 @@ class MainContainer extends React.Component {
     // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
   return {
-          dedupeData: state.DedupeReducer.dedupeData,
+        dedupeData: state.DedupeReducer.dedupeData,
         loadingBarProgress: state.DedupeReducer.percentage,
         initialTransaction: state.DedupeReducer.initialTransaction,
         currentVersion: state.DedupeReducer.currentVersion,
         active: state.DedupeReducer.active
+        
       };
     };
     

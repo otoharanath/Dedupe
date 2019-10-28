@@ -73,16 +73,13 @@ class Dashboard extends React.Component {
   };
   render() {
     const radius = 60;
-
-    console.log("resposnsefsgsg", this.state.responseData)
     let { responseData } = this.state;
     let jobDetails = responseData && responseData.message;
     let numberOfRecords = responseData && responseData.message && responseData.message.numberOfRecords
 
     let industryStats = responseData && responseData.message &&
       responseData.message.dashboardStats && responseData.message.dashboardStats[0] && responseData.message.dashboardStats[0].industryStats
-      
-    console.log("industry stats", industryStats)
+
     let finalObj = []
     industryStats && Object.keys(JSON.parse(industryStats)).map((keys) => {
       finalObj.push({
@@ -90,7 +87,6 @@ class Dashboard extends React.Component {
         value: JSON.parse(industryStats)[keys]
       })
     })
-    console.log("industry parsed", finalObj)
 
     const appendData =
       (jobDetails &&
@@ -119,19 +115,17 @@ class Dashboard extends React.Component {
         jobDetails.dashboardStats[0]) ||
       null;
     return (
-      <div className="container-fluid "
-     
-      style={{
+      <div className="container-fluid " style={{
         backgroundImage: `url(${bg})`,
-        width: "100%",
-        height: "100%",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        overFlow:'hidden'
-      }}
-    >
+        backgroundAttachment: "fixed",
+        overFlowY:"hidden"
+       }}>
+
         <br />
-        <div className="row " >
+        <div>
+        <div className="row ">
           <Col>
             <Card bg="light">
               <Card.Header>Progress Overview</Card.Header>
@@ -234,6 +228,8 @@ class Dashboard extends React.Component {
                     <Col style={{ color: "black" }}>
                       <br />
                       <br />
+                      <br />
+                      <br />
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -281,19 +277,23 @@ class Dashboard extends React.Component {
 
                 </div>
                 <br />
+                
+                  
+              
                 <div className="row " >
+                
                   <div className="col-md-4">
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Records</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Records</p>
                   </div>
                   <div className="col-md-4">
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Processed</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Processed</p>
 
                   </div>
                   <div className="col-md-4">
-                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Match</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Match</p>
 
                   </div>
-
+<br/><br/>
                 </div>
 
 
@@ -309,15 +309,17 @@ class Dashboard extends React.Component {
             <Card bg="light" style={{ height: '38rem' }}>
               <Card.Header>Industry Segmentation</Card.Header>
               <Card.Body>
+                
                 <div className="row " >
                   <div className="col-md-12">
                     <DonutChart
-                      height='550'
-                      width='800'
+                      height='450'
+                      width='700'
 colors={[ '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#607d8b' ]}
                       data={finalObj} />
                   </div>
                 </div>
+                
               </Card.Body>
             </Card>
           </Col>
@@ -376,6 +378,7 @@ colors={[ '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4c
               </Card.Body>
             </Card>
             </Col>
+        </div>
         </div>
 <br/>
 <br/>

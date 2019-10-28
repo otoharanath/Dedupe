@@ -217,7 +217,7 @@ class OtoJobsMain extends React.Component {
     }
     this.props.OtoJobsActions.postTransaction(sendObject,this.state.file);
     
-    
+   
   //  this.dashboardCall();
     //this.props.transactionId  ? this.props.OtoJobsActions.getDetails(this.props.transactionId && this.props.transactionId.transactionId) :null;
     this.forceUpdate();
@@ -241,26 +241,21 @@ class OtoJobsMain extends React.Component {
     console.log("fsfs", this.state.file)
     console.log("udhfkdfsiughksdughkd", this.props.details)
     return (
-
-      <div className="container-fluid container-without-scroll wrapper"
-     
-      style={{
+<div className = "cotainer-fluid">
+<div  style={{
+    top:"0",
+    left: "0",
+    width:"100%",
+    height:"100%",
+    position:"absolute",
         backgroundImage: `url(${bg})`,
-        width: "100%",
-        height: "100vh",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        overFlow:'hidden'
-      }}
-    >
-        <>
-          <LoadingOverlay
-            active={this.state.isLoading}
-            className="loader-spiner"
-            spinner={true}
-            fadeSpeed={300}
-            text="Loading..."
-          >
+        backgroundAttachment: "fixed",
+        overflow:"hidden"
+       
+       }}/>
+       
             <div
               className="col-md-5 col-md-offset-4"
               style={{
@@ -380,9 +375,7 @@ class OtoJobsMain extends React.Component {
               </div>
 
             </div>
-          </LoadingOverlay>
-
-        </>
+        
       </div >
 
     );

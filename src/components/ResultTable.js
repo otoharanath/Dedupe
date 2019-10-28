@@ -5,6 +5,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Navbar from "react-bootstrap/Navbar";
 //import Navbar from "react-bootstrap/Navbar";
 //import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
 //import { isUserWhitespacable } from '@babel/types';
@@ -13,12 +14,7 @@ import { connect } from 'react-redux';
 
 
 const bg = require("./bg.jpg");
-const divStyle = {
-  width: "100%",
-  height: "100%",
-  backgroundSize: "cover",
-  backgroundRepeat: "repeat"
-};
+
 
 class ResultTable extends React.Component {
   constructor(props) {
@@ -30,10 +26,13 @@ class ResultTable extends React.Component {
       isChecked: false,
       selectedRows: [],
       background: bg,
-      checkLength:0,
-      searchTerm:null
+      checkLength: 0,
+      searchTerm: null
     };
     this.getRowsData = this.getRowsData.bind(this);
+    this.undoAction = this.undoAction.bind(this);
+    this.redoAction = this.redoAction.bind(this);
+    this.exportExcel = this.exportExcel.bind(this);
     //this.handleSearch  = this.handleSearch.bind(this);
   }
 
@@ -51,18 +50,18 @@ class ResultTable extends React.Component {
     var items = document.getElementsByName('checkbox');
     for (var i = 0; i < items.length; i++) {
       this.setState({
-        checkLength:items.length
+        checkLength: items.length
       })
       if (items[i].type == 'checkbox')
         items[i].checked = false;
     }
   }
 
- getColor(value){
+  getColor(value) {
     //value from 0 to 1
-    var hue=((value)*120).toString(10);
-    return ["hsl(",hue,",90%,40%)"].join("");
-}
+    var hue = ((value) * 120).toString(10);
+    return ["hsl(", hue, ",90%,40%)"].join("");
+  }
 
   toggleCheckboxChange = (e, index, rowData) => {
     if (e.target.checked) {
@@ -82,7 +81,7 @@ class ResultTable extends React.Component {
         <input
           type="checkbox"
           name='checkbox'
-          className = "checkmark"
+          className="checkmark"
           className={'row-cb checkbox-' + row + ' matched-' + matchedData.index}
           value={matchedData.index}
           defaultChecked={this.state.isChecked}
@@ -124,7 +123,7 @@ class ResultTable extends React.Component {
   };
 
   showMerge = row => {
-    const { data, afterMerge } = this.props;
+    const { dedupeData, afterMerge } = this.props;
     const checkboxes = document.getElementsByClassName('checkbox-' + row.id);
     const checkedIds = [...checkboxes]
       .filter(checkbox => checkbox.checked)
@@ -135,11 +134,11 @@ class ResultTable extends React.Component {
 
     let rows = row.matches.map(match => {
       let b = JSON.parse(match);
-      const index = data.findIndex(item => item.id === b.index);
+      const index = dedupeData.findIndex(item => item.id === b.index);
       try {
         return {
-          data: JSON.parse(data[index] && data[index].data || '{}'),
-          id: data[index].id,
+          data: JSON.parse(dedupeData[index] && dedupeData[index].data || '{}'),
+          id: dedupeData[index].id,
           index
         };
       } catch (e) {
@@ -175,7 +174,7 @@ class ResultTable extends React.Component {
   };
 
   getRowsData = () => {
-    const items = this.props.data;
+    const items = this.props.dedupeData;
     const buttonstyle = { paddingTop: '5%' };
     /* let fil =[]
     if(!(this.state.searchTerm === null)){
@@ -199,25 +198,25 @@ class ResultTable extends React.Component {
       let yoyo = [];
       yoyo = Object.keys(user);
       let tabData = Object.values(user);
-    
+
 
       return (
-       
+
         <tr key={index}>
           {/* <td>{row.id}</td> */}
           <td>
-            <Table style={{ tableLayout: 'auto' }} className = "ui table"  >
+            <Table style={{ tableLayout: 'auto' }} className="ui table"  >
               <thead>
 
                 <tr>
-                  <th><strong style={{color: "black" }}>ID</strong></th>
+                  <th><strong style={{ color: "black" }}>ID</strong></th>
                   {
                     yoyo.map((heads) => {
-                      return <th style={{color: "black" }}><strong style={{color: "black" }}>{this.toProperCase(heads.replace("_", " "))}</strong></th>
+                      return <th style={{ color: "black" }}><strong style={{ color: "black" }}>{this.toProperCase(heads.replace("_", " "))}</strong></th>
                     })
                   }
-                  <th style={{color: "black" }} ><strong style={{color: "black" }}>Rating</strong></th>
-                  <th style={{color: "black" }}><strong style={{color: "black" }}>Select</strong></th>
+                  <th style={{ color: "black" }} ><strong style={{ color: "black" }}>Rating</strong></th>
+                  <th style={{ color: "black" }}><strong style={{ color: "black" }}>Select</strong></th>
                 </tr>
               </thead>
               <tbody>
@@ -230,34 +229,34 @@ class ResultTable extends React.Component {
                       )
                     })
                   }
-                  <td style={{justifyContent:"center"}}>---</td>
-                  <td style={{justifyContent:"center"}}>---</td>
+                  <td style={{ justifyContent: "center" }}>---</td>
+                  <td style={{ justifyContent: "center" }}>---</td>
 
 
                 </tr>
-               {/*  {row.matches.length === 0 ? null :<ColoredLine color="red" />} */}
-                {row.matches.sort((a,b) => (JSON.parse(b)).rating - (JSON.parse(a)).rating).map((match, index1) => {
-                  
+                {/*  {row.matches.length === 0 ? null :<ColoredLine color="red" />} */}
+                {row.matches.sort((a, b) => (JSON.parse(b)).rating - (JSON.parse(a)).rating).map((match, index1) => {
+
                   let a = JSON.parse(row.data);
                   let b = JSON.parse(match);
-                  const items = this.props.data;
+                  const items = this.props.dedupeData;
                   const item = items[items.findIndex(items => items.id == b.index)]
                   let parsed = JSON.parse(
                     item && item.data || null
 
                   );
-                  
+
                   if (!parsed) return <></>
                   let dynamicMatch = Object.values(parsed);
                   return (
                     <tr key={index1}>
-                      <td style = {{color:"black"}}>{b.index}</td>
+                      <td style={{ color: "black" }}>{b.index}</td>
                       {dynamicMatch.map((heads) => {
-                        return <td style = {{color:"black"}}>{heads}</td>
+                        return <td style={{ color: "black" }}>{heads}</td>
                       })
                       }
 
-                      <td style = {{color:"black", backgroundColor: this.getColor(b.rating.toFixed(2))}}>{b.rating.toFixed(2)}</td>
+                      <td style={{ color: "black", backgroundColor: this.getColor(b.rating.toFixed(2)) }}>{b.rating.toFixed(2)}</td>
                       <td>
                         {this.action(row.id, b, parsed)}
                         &nbsp;
@@ -285,46 +284,169 @@ class ResultTable extends React.Component {
             }
           </td>
         </tr>
-       
+
       );
-      
+
     });
   };
-/* handleSearch(event){
-  this.setState({
-  searchTerm: event.target.value
-  }) 
-}
-searchCl(){
-  this.forceUpdate();
-} */
-  render() {
-    console.log("selected",this.state.checkLength)
-    return (
-      <div
-        className="cComponent"
-        style={divStyle}
-        style={{
-          backgroundImage: `url(${this.state.background})`,
-          width: "100%",
-          height: "100%",
-          backgroundSize: "cover",
-          backgroundRepeat: "repeat-y"
-        }}
-      >
+  /* handleSearch(event){
+    this.setState({
+    searchTerm: event.target.value
+    }) 
+  }
+  searchCl(){
+    this.forceUpdate();
+  } */
 
-        <Table className = "ui inverted blue table"  >
+  undoAction() {
+    let undoObject = {
+      version:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.version - 1,
+      transactionId:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.transactionId
+    };
+    // this.props.DedupeActions.setCurrentVersion(undoObject);
+    this.props.DedupeActions.getTransactionStateUndoRedo(undoObject);
+    this.forceUpdate();
+  }
+
+  redoAction() {
+    let redoObject = {
+      version:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.version + 1,
+      transactionId:
+        this.props.initialTransaction &&
+        this.props.initialTransaction.transactionId
+    };
+    // this.props.DedupeActions.setCurrentVersion(redoObject);
+    this.props.DedupeActions.getTransactionStateUndoRedo(redoObject);
+    this.forceUpdate();
+  }
+
+  exportExcel(data) {
+    let fd = new FormData();
+    fd.append("transactionId", data.transactionId);
+    fd.append("version", data.version);
+    fetch("https://otobots.otomashen.com:6969/dedupe/downloadFile", {
+      method: "POST",
+      body: fd
+    }).then(response => {
+      //  console.log("in download response", response)
+      response.blob().then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement("a");
+        a.href = url;
+        a.download = "export.csv";
+        a.click();
+      });
+    });
+  }
+
+  render() {
+    let isTrue = false
+    return (
+       
+      <div className="container-fluid"  style={{
+        
+            backgroundImage: `url(${bg})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundAttachment: "fixed",
+            overflow:"hidden"
+           
+           }}>
+        {this.props.dedupeData ?
+          <div>
+<br/>
+        <Table className="ui inverted blue table"  >
           <thead>
             <tr>
               {/*  <th>ID</th> */}
-              <th className = "col-md-10">Data With Matches</th>
-              <th className = "col-md-2">Actions</th>
+              <th className="col-md-10">Data With Matches</th>
+              <th className="col-md-2">Actions</th>
             </tr>
           </thead>
           <tbody>{this.getRowsData()}</tbody>
         </Table>
+
+        <Navbar
+
+          style={{
+            position: "fixed",
+            left: "50%",
+            top: "95%",
+            transform: "translate(-50%, -90%)",
+            backgroundColor: 'black'
+          }}
+          sticky="bottom"
+        >
+          <br />
+          <Navbar.Collapse className="justify-content-end">
+
+            <Button
+              variant="primary"
+              disabled={
+                this.props.initialTransaction &&
+                  this.props.initialTransaction.version == 0 &&
+                  this.props.initialTransaction
+                  ? true
+                  : false
+              }
+
+              size="sm"
+              style={{ color: "#FFF" }}
+              onClick={this.undoAction}
+            >
+              <span className=" fa fa-undo "></span>
+              &nbsp;Undo
+</Button>
+            &nbsp;  &nbsp;
+          
+<Button
+              variant="primary"
+
+              size="sm"
+              style={{ color: "#FFF" }}
+              disabled={
+                (this.props.initialTransaction &&
+                  this.props.initialTransaction.version) <
+                  (this.props.currentVersion &&
+                    this.props.currentVersion.version)
+                  ? false
+                  : true
+              }
+              onClick={this.redoAction}
+            >
+              <span className=" fa fa-repeat "></span>
+              &nbsp;Redo
+</Button>
+            &nbsp;  &nbsp;
+<Button
+              variant="success"
+              disabled={isTrue}
+              size="sm"
+              style={{ color: "#FFF" }}
+
+              onClick={() =>
+                this.exportExcel(this.props.initialTransaction)
+              }
+            >
+              <span className=" fa fa-download "></span>
+              &nbsp;Export
+</Button>
+
+          </Navbar.Collapse>
+          <br />
+        </Navbar>
+
         <MergeModal />
+        </div>
+        : this.props.history.push('/')}
       </div>
+      
     );
   }
 }
@@ -332,7 +454,10 @@ searchCl(){
 function mapStateToProps(state) {
   return {
     showDedupe: state.DedupeReducer.showDedupe,
-    inputResponse: state.DedupeReducer.inputResponse
+    inputResponse: state.DedupeReducer.inputResponse,
+    initialTransaction: state.DedupeReducer.initialTransaction,
+    currentVersion: state.DedupeReducer.currentVersion,
+    dedupeData: state.DedupeReducer.dedupeData
 
   };
 }

@@ -6,6 +6,7 @@ import OtoJobsMain from './components/OtoJobsMain';
 import { Route, Link, Redirect, Switch } from 'react-router-dom';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import ResultTable from './components/ResultTable';
 
 
 
@@ -21,15 +22,19 @@ class Router extends React.Component {
     }
 
     render() {
-        console.log("loggedin",this.props.isAuth)
+
         return (
+            <div >
             <Switch>
+                
                 <Route exact path="/" component={MainContainer} />
                 <Route exact path="/login" component={Login} />
                  <Route exact path="/Otojobs" component={OtoJobsMain} /> 
                 <Route path="/dashboard/:tranId" component={Dashboard} />
+                <Route path="/dedupeTable" component={ResultTable} />
              {/*    <ProtectedRoute loggedIn={this.props.isAuth} path="/Otojobs" component={OtoJobsMain} /> */}
             </Switch>
+            </div>
         )
     }
 }
