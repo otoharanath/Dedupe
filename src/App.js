@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
 import Navbar from "react-bootstrap/Navbar";
-import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
+import { Nav, Form, FormControl, NavItem, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Router from './Router';
 
@@ -41,7 +41,15 @@ const MainMenu = () => {
 
       <Nav className="mr-auto">
         <Nav.Link style={{ color: 'white' }} href="/">Home</Nav.Link>
-        <Nav.Link style={{ color: 'white' }} href="/Otojobs">Otojobs</Nav.Link>
+
+
+        <NavDropdown style={{ color: 'white' }} title="Otojobs" >
+        <NavDropdown.Item  href="/Otojobs">New Job</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item  href="/OtojobsRecent">Recent Transactions</NavDropdown.Item>
+        </NavDropdown>
+
+       {/*  <Nav.Link style={{ color: 'white' }} href="/Otojobs">Otojobs</Nav.Link> */}
         <Nav.Link style={{ color: 'white' }} href="/">Dedupe</Nav.Link>
        
       </Nav>

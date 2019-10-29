@@ -390,7 +390,6 @@ const mapStateToProps = (state, ownProps) => {
     initialTransaction: state.DedupeReducer.initialTransaction,
     currentVersion: state.DedupeReducer.currentVersion,
     active: state.DedupeReducer.active,
-
     optionData: state.OtoJobsReducer.optionData,
     transactionId:state.OtoJobsReducer.transactionId,
     details:state.OtoJobsReducer.details

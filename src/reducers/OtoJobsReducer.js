@@ -1,19 +1,24 @@
 import { 
   OJ_OPTION_DATA,
   OJ_TRANSACTION_ID,
-  OJ_DETAILS
+  OJ_DETAILS,
+  OJ_RECENT_TRANS
 } from '../actions';
 
 const InitialState = {
   optionData:{},
   transactionId: {},
-  details: {}
+  details: {},
+  recentTransactions : {}
 };
 
 let OtoJobsReducer = function (state = InitialState, action) {
   switch (action.type) {
     case OJ_OPTION_DATA:
       return Object.assign({}, state, { optionData: action.optionData });
+
+      case OJ_RECENT_TRANS:
+      return Object.assign({}, state, { recentTransactions: action.recentTrans });
 
       case OJ_TRANSACTION_ID:
       return Object.assign({}, state, { transactionId: action.transactionId });
