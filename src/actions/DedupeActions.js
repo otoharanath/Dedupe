@@ -11,7 +11,7 @@ import {
   IS_AUTH,
   DEDUPE_COLUMNS
 } from '.';
-
+const token = localStorage.getItem('user');
 let actions = {
   setShowModal: value => ({
     type: SHOW_MODAL,
@@ -46,6 +46,9 @@ let actions = {
 
       fetch('https://otobots.otomashen.com:6969/dedupe/postTransaction', {
         method: 'POST',
+        headers: new Headers({
+          'Authorization': 'Bearer ' + token,
+      }),
         body
       })
         .then((data) => (data.json()))      
@@ -70,6 +73,9 @@ let actions = {
 
       fetch('https://otobots.otomashen.com:6969/dedupe/postTransactionExact', {
         method: 'POST',
+        headers: new Headers({
+          'Authorization': 'Bearer ' + token,
+      }),
         body
       })
         .then((data) => (data.json()))      
@@ -96,6 +102,9 @@ let actions = {
     fd.append('version', data.version)
     fetch('https://otobots.otomashen.com:6969/dedupe/getTransactionState', {
       method: 'POST',
+      headers: new Headers({
+        'Authorization': 'Bearer ' + token,
+    }),
       body: fd
     }).then((response) => response.json())
      .then((response) => {
@@ -157,6 +166,9 @@ updateTransaction: (body, tid) => {
 
     fetch('https://otobots.otomashen.com:6969/dedupe/updateTransactionState', {
       method: 'POST',
+      headers: new Headers({
+        'Authorization': 'Bearer ' + token,
+    }),
       body: form
     })
       .then((data) => (data.json()))
@@ -190,6 +202,9 @@ export const getTransactionState = (data, dispatch) => {
   fd.append('version', data.version)
   fetch('https://otobots.otomashen.com:6969/dedupe/getTransactionState', {
     method: 'POST',
+    headers: new Headers({
+      'Authorization': 'Bearer ' + token,
+  }),
     body: fd
   }).then((response) => response.json())
    .then((response) => {

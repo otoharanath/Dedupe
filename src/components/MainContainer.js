@@ -2,32 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 import Button from "react-bootstrap/Button";
 import OptionSelectModal from "./OptionSelectModal";
-import Navbar from "react-bootstrap/Navbar";
+//import Navbar from "react-bootstrap/Navbar";
 //import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
-import ResultTable from "./ResultTable";
+//import ResultTable from "./ResultTable";
 import DedupeActions from "../actions/DedupeActions";
 import { bindActionCreators } from "redux";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-bootstrap/Dropdown";
-import LoadingOverlay from "react-loading-overlay";
+//import LoadingOverlay from "react-loading-overlay";
 import LoadingBar from "react-top-loading-bar";
 //import Table from "react-bootstrap/Table";
 import ToggleButton from 'react-toggle-button'
-import lines from 'svg-patterns/p/lines';
+//import lines from 'svg-patterns/p/lines';
 
 //import stringify from 'virtual-dom-stringify';
 const bg = require("./bg.jpg");
-const divStyle = {
-  width: "100%",
-  height: "80%",
-  backgroundSize: "cover",
-  backgroundRepeat: "no-repeat"
-};
-const pattern = lines({
-  stroke: '#9c92ac',
-  background: '#dfdbe5',
-  orientations: [45]
-});
+
 
 var Papa = require("papaparse/papaparse.min.js");
 

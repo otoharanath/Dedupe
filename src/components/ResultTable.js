@@ -424,15 +424,9 @@ class ResultTable extends React.Component {
               &nbsp;Redo
 </Button>
             &nbsp;  &nbsp;
-<Button
+<div className = "button"
               variant="success"
-              disabled={
-                this.props.initialTransaction &&
-                  this.props.initialTransaction.version == 0 &&
-                  this.props.initialTransaction
-                  ? true
-                  : false
-              }
+              
 
               size="sm"
               style={{ color: "#FFF" }}
@@ -443,7 +437,7 @@ class ResultTable extends React.Component {
             >
               <span className=" fa fa-download "></span>
               &nbsp;Export
-</Button>
+</div>
 
           </Navbar.Collapse>
           <br />
