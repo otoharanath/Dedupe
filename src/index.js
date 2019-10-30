@@ -6,7 +6,14 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import store from './store';
 import {BrowserRouter} from 'react-router-dom';
+import { AUTHENTICATED } from './actions/LoginAction';
 import '../node_modules/font-awesome/css/font-awesome.min.css'; 
+
+const user = localStorage.getItem('user');
+
+if(user) {
+  store.dispatch({ type: AUTHENTICATED });
+}
 
 
 ReactDOM.render(

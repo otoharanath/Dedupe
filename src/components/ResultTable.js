@@ -346,7 +346,7 @@ class ResultTable extends React.Component {
   }
 
   render() {
-    let isTrue = false
+    console.log("last response",this.props.dedupeData)
     return (
        
       <div className="container-fluid"  style={{
@@ -426,7 +426,14 @@ class ResultTable extends React.Component {
             &nbsp;  &nbsp;
 <Button
               variant="success"
-              disabled={isTrue}
+              disabled={
+                this.props.initialTransaction &&
+                  this.props.initialTransaction.version == 0 &&
+                  this.props.initialTransaction
+                  ? true
+                  : false
+              }
+
               size="sm"
               style={{ color: "#FFF" }}
 

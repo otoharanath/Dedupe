@@ -14,6 +14,7 @@ import LoadingBar from "react-top-loading-bar";
 //import Table from "react-bootstrap/Table";
 import ToggleButton from 'react-toggle-button'
 import lines from 'svg-patterns/p/lines';
+
 //import stringify from 'virtual-dom-stringify';
 const bg = require("./bg.jpg");
 const divStyle = {
@@ -305,17 +306,7 @@ class MainContainer extends React.Component {
 
                     <div className="input-group col-md-9">
                       &nbsp;&nbsp;
-                      <div className="input-group-prepend">
-                        <span
-                        style={{ cursor: 'pointer' }}
-                          onClick={this.onFormSubmit}
-                          className="input-group-text"
-                          id="inputGroupFileAddon01"
-                        >
-                          {" "}
-                          Upload{" "}
-                        </span>
-                      </div>
+                     
                       <div className="custom-file">
                         <input
                           type="file"
@@ -330,6 +321,17 @@ class MainContainer extends React.Component {
                         >
                           {this.props.active && this.props.active.filename}
                         </label>
+                      </div>
+                      <div className="input-group-prepend">
+                        <span
+                        style={{ cursor: 'pointer' }}
+                          onClick={this.onFormSubmit}
+                          className="input-group-text"
+                          id="inputGroupFileAddon01"
+                        >
+                          {" "}
+                          Upload{" "}
+                        </span>
                       </div>
                     </div>
                     <div className="col-md-3">

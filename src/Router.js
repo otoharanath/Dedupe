@@ -1,13 +1,16 @@
 import React from 'react';
 import Dashboard from "./components/Dashboard"
-import Login from './components/Login'
 import MainContainer from './components/MainContainer';
 import OtoJobsMain from './components/OtoJobsMain';
 import { Route, Link, Redirect, Switch } from 'react-router-dom';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ResultTable from './components/ResultTable';
+import Signin from './components/Signin';
 import OtojobsRecent from './components/OtojobsRecent';
+import requireAuth from './components/require_auth';
+import noRequireAuth from './components/no_require_auth';
+
 
 
 
@@ -28,12 +31,15 @@ class Router extends React.Component {
             <div >
             <Switch>
                 
-                <Route exact path="/" component={MainContainer} />
-                <Route exact path="/login" component={Login} />
-                 <Route exact path="/Otojobs" component={OtoJobsMain} /> 
-                <Route path="/dashboard/:tranId" component={Dashboard} />
-                <Route path="/dedupeTable" component={ResultTable} />
-                <Route path="/otojobsRecent" component={OtojobsRecent} />
+                <Route exact path="/" component={requireAuth(MainContainer)} />
+               
+                <Route exact path="/Otojobs" component={requireAuth(OtoJobsMain)} /> 
+                
+                <Route exact path="/Login" component={noRequireAuth(Signin)} /> 
+            
+                <Route path="/dashboard/:tranId" component={requireAuth(Dashboard)} />
+                <Route path="/dedupeTable" component={requireAuth(ResultTable)} />
+                <Route path="/otojobsRecent" component={requireAuth(OtojobsRecent)} />
              {/*    <ProtectedRoute loggedIn={this.props.isAuth} path="/Otojobs" component={OtoJobsMain} /> */}
             </Switch>
             </div>
@@ -41,33 +47,11 @@ class Router extends React.Component {
     }
 }
 
-const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
-    return (
-        <Route
-            path={path}
-            {...rest}
-            render={props => {
-                return loggedIn ? (
-                    <Comp {...props} />
-                ) : (
-                        <Redirect
-                            to={{
-                                pathname: "/login",
-                                state: {
-                                    prevLocation: path,
-                                    error: "You need to login first!",
-                                },
-                            }}
-                        />
-                    );
-            }}
-        />
-    );
-};
 
 const mapStateToProps = (state, ownProps) => {
     return {
-      isAuth: state.DedupeReducer.isAuth
+      isAuth: state.DedupeReducer.isAuth,
+      authenticated: state.auth.authenticated
     };
   };
   

@@ -5,11 +5,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
 import Navbar from "react-bootstrap/Navbar";
 import { Nav, Form, FormControl, NavItem, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Router from './Router';
-
-
+import  { signOutAction } from './actions/LoginAction';
 import './App.css';
+
+
+
+
 library.add(faEnvelope, faKey);
 const bg = require("./components/bg.jpg");
 const divStyle = {
@@ -20,9 +23,29 @@ const divStyle = {
 };
 
 
-const MainMenu = () => {
-  return (
-    <Navbar style={{ background: 'black' }} fluid sticky="top">
+
+
+
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      
+    };
+  
+    this.signOut = this.signOut.bind(this);
+
+  }
+
+  signOut() {
+    this.props.signOutAction();
+  }
+
+  render() {
+    return (
+      <div>
+         <Navbar style={{ background: 'black', color:"white" }} fluid sticky="top">
       <Navbar.Brand href="/">
         <img
           alt=""
@@ -37,48 +60,33 @@ const MainMenu = () => {
         </Navbar.Text>
        
       </Navbar.Brand>
-      
-
+      {   this.props.authenticated ?
       <Nav className="mr-auto">
-        <Nav.Link style={{ color: 'white' }} href="/">Home</Nav.Link>
-
-
-        <NavDropdown style={{ color: 'white' }} title="Otojobs" >
+        <Nav.Link style={{ color: 'white' }} href="/"><strong style={{ color: 'white' }}>Home</strong></Nav.Link>
+        <NavDropdown  title={<strong style={{ color: 'white' }}>Otojobs</strong>} >
         <NavDropdown.Item  href="/Otojobs">New Job</NavDropdown.Item>
         <NavDropdown.Divider />
         <NavDropdown.Item  href="/OtojobsRecent">Recent Transactions</NavDropdown.Item>
         </NavDropdown>
 
        {/*  <Nav.Link style={{ color: 'white' }} href="/Otojobs">Otojobs</Nav.Link> */}
-        <Nav.Link style={{ color: 'white' }} href="/">Dedupe</Nav.Link>
+        <Nav.Link style={{ color: 'white' }} href="/"><strong style={{ color: 'white' }}>Dedupe</strong></Nav.Link>
        
       </Nav>
+      :null}
       <Navbar.Collapse className="justify-content-end">
+      {   this.props.authenticated ?
+        <NavDropdown style={{ color: 'white' }} title="Ashrin Mathur" >
+        <NavDropdown.Item  onClick = {this.signOut}>Sign Out</NavDropdown.Item>
+        </NavDropdown>
+
+        :
         <Navbar.Text style={{ color: 'white' }}>
-          Signed in as: <a style={{ color: 'white' }} href="/"><strong>Ashrin Mathur</strong></a>
-        </Navbar.Text>
+        <a style={{ color: 'white' }} href="/Login"><strong>Sign In</strong></a>
+      </Navbar.Text>
+      }
       </Navbar.Collapse>
     </Navbar>
-  );
-};
-
-
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      
-    };
-  
-    //this.onChange = this.onChange.bind(this);
-
-  }
-
-  render() {
-    return (
-      <div>
-        <MainMenu />
        
         <Router />
       
@@ -89,14 +97,16 @@ class App extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    isAuth: state.DedupeReducer.isAuth
+    isAuth: state.DedupeReducer.isAuth,
+    authenticated: state.auth.authenticated
   };
 };
 
 // Maps actions to props
 const mapDispatchToProps = dispatch => {
   return {
-
+    signOutAction: bindActionCreators(signOutAction, dispatch)
+    
   };
 };
 

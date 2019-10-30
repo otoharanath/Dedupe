@@ -2,9 +2,11 @@ import {
     OJ_OPTION_DATA,
     OJ_TRANSACTION_ID,
     OJ_DETAILS,
-    OJ_RECENT_TRANS
+    OJ_RECENT_TRANS,
+    LOGIN_USER
 } from '.';
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhcmlrc2hpdHNoYXJtYTcwQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoicGFzc3dvcmQiLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE1NzExMDQxODcsImV4cCI6MTU3MTEwNzc4N30.shNUTktPpeE8O2e8wiPGujpyoID-pjxkvNbZRXRgpVs'
+const token = localStorage.getItem('user');
+const customerId = localStorage.getItem('customerId');
 let actions = {
 
     getOptionData: () => {
@@ -27,10 +29,11 @@ let actions = {
                 })
         };
     },
+    
     otojobsRecentTransactions: (customerId) => {
         return function (dispatch) {
             const fd = new FormData();
-            fd.append('customerId', customerId)
+            fd.append('customerId', localStorage.getItem('customerId'))
             fetch('https://otobots.otomashen.com:6969/transaction/getAllTransactions', {
                 method: 'POST',
                 headers: new Headers({
@@ -53,7 +56,7 @@ let actions = {
 
         return function (dispatch) {
             const fd = new FormData();
-            fd.append('customerId', inputObject.customerId)
+            fd.append('customerId', localStorage.getItem('customerId'))
             fd.append('upload_file', file)
             fd.append('fileType', file.name.split("."))
             fd.append('fileName', file.name)
@@ -112,6 +115,37 @@ export const getDetails = (data) => {
 
 
 }
+
+export const userLoginFetch = (user) => {
+    return function (dispatch) {
+        const fd = new FormData();
+         fd.append('email', user.email)
+         fd.append('password', user.password)
+
+       fetch("https://otobots.otomashen.com:6969/client/login", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: fd
+      })
+        .then(resp => resp.json())
+        .then(data => {
+          if (data.message) {
+            
+          } else {
+            localStorage.setItem("token", data.token)
+            dispatch(loginUser(data.user))
+          }
+        })
+    }
+  }
+
+  const loginUser = userObj => ({
+    type: 'LOGIN_USER',
+    payload: userObj
+})
 
 
 
