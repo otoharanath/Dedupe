@@ -33,6 +33,7 @@
     "react-countup": "^4.2.2",
     "react-dom": "^16.10.2",
     "react-donut-chart": "^1.1.8",
+    "react-draggable": "^4.1.0",
     "react-filepond": "^7.0.1",
     "react-liquid-gauge": "^1.2.4",
     "react-loading-overlay": "^1.0.1",

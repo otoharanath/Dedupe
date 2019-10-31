@@ -37,10 +37,13 @@ class OptionSelectModal extends React.Component {
   };
 
   onSave() {
+    var fileName = this.props.file.name.split('.',2)
     let form = new FormData();
     form.append('upload_file', this.props.file);
     form.append('threshold', this.props.threshold);
     form.append('selectedFields', this.state.selectedOptions.toString());
+    form.append('fileName', fileName[0]);
+    console.log("filename aaaaaa",fileName[0])
     this.props.DedupeActions.setShowSelectModal(false);
     this.props.DedupeActions.dedupeColumns(this.state.selectedOptions);
     this.props.toggle ? 

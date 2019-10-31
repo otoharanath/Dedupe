@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Navbar from "react-bootstrap/Navbar";
+import Draggable from 'react-draggable';
 //import Navbar from "react-bootstrap/Navbar";
 //import { Nav, Form, FormControl, NavItem } from 'react-bootstrap';
 //import { isUserWhitespacable } from '@babel/types';
@@ -332,6 +333,9 @@ class ResultTable extends React.Component {
     fd.append("version", data.version);
     fetch("https://otobots.otomashen.com:6969/dedupe/downloadFile", {
       method: "POST",
+      headers: new Headers({
+        'Authorization': 'Bearer ' + localStorage.getItem('user'),
+    }),
       body: fd
     }).then(response => {
       //  console.log("in download response", response)
@@ -362,7 +366,7 @@ class ResultTable extends React.Component {
           <div>
 <br/>
         <Table className="ui inverted blue table"  >
-          <thead>
+          <thead className="sticky">
             <tr>
               {/*  <th>ID</th> */}
               <th className="col-md-10">Data With Matches</th>
@@ -371,10 +375,9 @@ class ResultTable extends React.Component {
           </thead>
           <tbody>{this.getRowsData()}</tbody>
         </Table>
-
-        <Navbar
-
-          style={{
+        
+        {/* <Navbar
+           style={{
             position: "fixed",
             left: "50%",
             top: "95%",
@@ -441,8 +444,46 @@ class ResultTable extends React.Component {
 
           </Navbar.Collapse>
           <br />
-        </Navbar>
-
+        </Navbar> */}
+        <div style={{
+            position: "fixed",
+            left: "50%",
+            top: "95%",
+            transform: "translate(-50%, -90%)"
+            
+          }} className="ui inverted compact menu sticky">
+            {
+    this.props.initialTransaction &&
+      this.props.initialTransaction.version == 0 &&
+      this.props.initialTransaction
+      ?  null
+      : <a 
+      onClick={this.undoAction}
+      className="item">
+        <i className="undo icon"></i>
+        Undo
+      </a>
+  } 
+ {
+                (this.props.initialTransaction &&
+                  this.props.initialTransaction.version) <
+                  (this.props.currentVersion &&
+                    this.props.currentVersion.version)
+                  ? <a className="item"  onClick={this.redoAction}>
+                  <i className="redo icon"></i>
+                  Redo
+                </a>
+                  : null
+              }
+  
+  <a className="item"  onClick={() =>
+                this.exportExcel(this.props.initialTransaction)
+              }>
+    <i className="download icon"></i>
+    Export
+  </a>
+</div>
+        
         <MergeModal />
         </div>
         : this.props.history.push('/')}
