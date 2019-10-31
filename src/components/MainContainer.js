@@ -84,7 +84,7 @@ class MainContainer extends React.Component {
       // fetch file data.
       // this.props.postTransaction(form)
     }
-  }
+  } 
 
   updateData(result) {
     var dataParse = result.data;

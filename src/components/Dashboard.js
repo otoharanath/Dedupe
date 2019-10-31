@@ -56,6 +56,9 @@ class Dashboard extends React.Component {
     fd.append('transactionId', params.tranId)
     fetch('https://otobots.otomashen.com:6969/transaction/getDetails', {
       method: 'POST',
+      headers: new Headers({
+        'Authorization': 'Bearer ' + localStorage.getItem('user'),
+    }),
       body: fd
     })
       .then((data) => (data.json()))

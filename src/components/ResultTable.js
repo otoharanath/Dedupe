@@ -346,7 +346,7 @@ class ResultTable extends React.Component {
   }
 
   render() {
-    console.log("last response",this.props.dedupeData)
+    console.log("last response",this.props.data)
     return (
        
       <div className="container-fluid"  style={{
@@ -394,7 +394,7 @@ class ResultTable extends React.Component {
                   this.props.initialTransaction
                   ? true
                   : false
-              }
+              } 
 
               size="sm"
               style={{ color: "#FFF" }}

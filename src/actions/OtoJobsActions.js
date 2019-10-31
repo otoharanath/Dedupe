@@ -29,7 +29,7 @@ let actions = {
                 })
         };
     },
-    
+
     otojobsRecentTransactions: (customerId) => {
         return function (dispatch) {
             const fd = new FormData();
@@ -78,8 +78,8 @@ let actions = {
                         )
 
                     })
-                   // history.push('/dashboard/'+data.transactionId)
-                   // dispatch(getDetails(data))
+                    // history.push('/dashboard/'+data.transactionId)
+                    // dispatch(getDetails(data))
                 })
         };
     },
@@ -88,17 +88,15 @@ let actions = {
 
 export const getDetails = (data) => {
     return function (dispatch) {
-         const fd = new FormData();
-         fd.append('transactionId', data.transactionId)
-        //  fd.append('upload_file', file)
-        //  fd.append('action',   '"'+ JSON.stringify(inputObject.action) + '"')
-        // console.log("sdgsd", '"'+ JSON.stringify(inputObject.action) + '"')
+        const fd = new FormData();
+        fd.append('transactionId', data.transactionId)
+
         fetch('https://otobots.otomashen.com:6969/transaction/getDetails', {
             method: 'POST',
             headers: new Headers({
                 'Authorization': 'Bearer ' + token,
             }),
-            body:fd
+            body: fd
 
         })
             .then((data) => (data.json()))
@@ -119,30 +117,30 @@ export const getDetails = (data) => {
 export const userLoginFetch = (user) => {
     return function (dispatch) {
         const fd = new FormData();
-         fd.append('email', user.email)
-         fd.append('password', user.password)
+        fd.append('email', user.email)
+        fd.append('password', user.password)
 
-       fetch("https://otobots.otomashen.com:6969/client/login", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: fd
-      })
-        .then(resp => resp.json())
-        .then(data => {
-          if (data.message) {
-            
-          } else {
-            localStorage.setItem("token", data.token)
-            dispatch(loginUser(data.user))
-          }
+        fetch("https://otobots.otomashen.com:6969/client/login", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            body: fd
         })
-    }
-  }
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.message) {
 
-  const loginUser = userObj => ({
+                } else {
+                    localStorage.setItem("token", data.token)
+                    dispatch(loginUser(data.user))
+                }
+            })
+    }
+}
+
+const loginUser = userObj => ({
     type: 'LOGIN_USER',
     payload: userObj
 })

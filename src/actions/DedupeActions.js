@@ -9,7 +9,8 @@ import {
   CURRENT_VERSION,
   SHOW_SELECT_MODAL,
   IS_AUTH,
-  DEDUPE_COLUMNS
+  DEDUPE_COLUMNS,
+  D_RECENT_TRANS
 } from '.';
 const token = localStorage.getItem('user');
 let actions = {
@@ -152,7 +153,28 @@ let actions = {
     }
     },
 
-    
+    dedupeRecentTransactions: () => {
+      return function (dispatch) {
+          const fd = new FormData();
+          fd.append('customerId', localStorage.getItem('customerId'))
+          fetch('https://otobots.otomashen.com:6969/transaction/getAllDedupeTransactions', {
+              method: 'POST',
+              headers: new Headers({
+                  'Authorization': 'Bearer ' + token,
+              }),
+              body: fd
+          })
+              .then((data) => (data.json()))
+              .then((data) => {
+                  dispatch({
+                      type: D_RECENT_TRANS,
+                      recentTrans: (
+                          data
+                      )
+                  })
+              })
+      };
+  },
 
 updateTransaction: (body, tid) => {
   

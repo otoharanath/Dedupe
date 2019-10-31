@@ -1,4 +1,5 @@
-import { AFTER_MERGE_SAVE,
+import {
+  AFTER_MERGE_SAVE,
   SELECTED_ROW_DATA,
   SHOW_MODAL,
   GLOBAL_RESPONSE,
@@ -8,7 +9,8 @@ import { AFTER_MERGE_SAVE,
   CURRENT_VERSION,
   SHOW_SELECT_MODAL,
   IS_AUTH,
-  DEDUPE_COLUMNS
+  DEDUPE_COLUMNS,
+  D_RECENT_TRANS
 } from '../actions';
 
 const InitialState = {
@@ -18,10 +20,11 @@ const InitialState = {
   inputResponse: {},
   responseData: {},
   initialTransaction: {},
-  currentVersion:{},
-  active:{},
-  isAuth:false,
-  dedupeColumns : []
+  currentVersion: {},
+  active: {},
+  isAuth: false,
+  dedupeColumns: [],
+  recentTransactions: {}
 };
 
 let DedupeReducer = function (state = InitialState, action) {
@@ -29,8 +32,11 @@ let DedupeReducer = function (state = InitialState, action) {
     case SHOW_MODAL:
       return Object.assign({}, state, { showDedupe: action.data });
 
-      case SHOW_SELECT_MODAL:
-        return Object.assign({}, state, { showSelect: action.data });
+    case SHOW_SELECT_MODAL:
+      return Object.assign({}, state, { showSelect: action.data });
+
+    case D_RECENT_TRANS:
+      return Object.assign({}, state, { recentTransactions: action.recentTrans });
 
     case SELECTED_ROW_DATA:
       return Object.assign({}, state, { rows: action.data });
@@ -38,20 +44,20 @@ let DedupeReducer = function (state = InitialState, action) {
     case AFTER_MERGE_SAVE:
       return Object.assign({}, state, { finalData: action.data });
 
-      case IS_AUTH:
-        return Object.assign({}, state, { isAuth: action.data });
+    case IS_AUTH:
+      return Object.assign({}, state, { isAuth: action.data });
 
     case GLOBAL_RESPONSE:
       return Object.assign({}, state, { inputResponse: action.data });
 
-      case DEDUPE_COLUMNS:
+    case DEDUPE_COLUMNS:
       return Object.assign({}, state, { dedupeColumns: action.data });
 
-      case INITIAL_TRANSACTION:
-        return Object.assign({}, state, { initialTransaction: action.initialTransaction });
-  
-      case CURRENT_VERSION:
-        return Object.assign({}, state, { currentVersion: action.currentVersion });
+    case INITIAL_TRANSACTION:
+      return Object.assign({}, state, { initialTransaction: action.initialTransaction });
+
+    case CURRENT_VERSION:
+      return Object.assign({}, state, { currentVersion: action.currentVersion });
 
     case FETCH_TABLE_DATA:
       return Object.assign({}, state, { dedupeData: action.dedupeData });

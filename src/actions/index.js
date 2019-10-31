@@ -14,3 +14,4 @@ export const IS_AUTH = 'IS_AUTH';
 export const DEDUPE_COLUMNS = 'DEDUPE_COLUMNS';
 export const OJ_RECENT_TRANS = 'OJ_RECENT_TRANS';
 export const LOGIN_USER = 'LOGIN_USER';
+export const D_RECENT_TRANS = 'D_RECENT_TRANS';

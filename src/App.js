@@ -70,7 +70,13 @@ class App extends React.Component {
         </NavDropdown>
 
        {/*  <Nav.Link style={{ color: 'white' }} href="/Otojobs">Otojobs</Nav.Link> */}
-        <Nav.Link style={{ color: 'white' }} href="/"><strong style={{ color: 'white' }}>Dedupe</strong></Nav.Link>
+       <NavDropdown  title={<strong style={{ color: 'white' }}>Dedupe</strong>} >
+        <NavDropdown.Item  href="/">New Job</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item  href="/dedupeRecent">Recent Transactions</NavDropdown.Item>
+        </NavDropdown>
+
+        {/* <Nav.Link style={{ color: 'white' }} href="/"><strong style={{ color: 'white' }}>Dedupe</strong></Nav.Link> */}
        
       </Nav>
       :null}

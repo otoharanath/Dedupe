@@ -1,4 +1,4 @@
-import OtoJobsActions from '../actions/OtoJobsActions';
+import DedupeActions from "../actions/DedupeActions";
 import React from 'react';
 import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 const bg = require("./bg3.jpg");
 
 
-class OtojobsRecent extends React.Component {
+class DedupeRecent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,10 +16,15 @@ class OtojobsRecent extends React.Component {
   }
 
   componentWillMount() {
-    this.props.OtoJobsActions.otojobsRecentTransactions("1");
+    this.props.DedupeActions.dedupeRecentTransactions();
+  }
+
+  goToResult(dat) {
+    console.log("dat",dat)
   }
 
   render() {
+    console.log("recentTransactions",this.props.recentTransactions)
     return (
       <div className="container-fluid " style={{
         backgroundImage: `url(${bg})`,
@@ -28,7 +33,8 @@ class OtojobsRecent extends React.Component {
         backgroundAttachment: "fixed",
         overFlowY: "hidden"
       }}>
-        <br/>
+       
+<br/>
         <Table celled className="ui white  inverted table">
           <Table.Header >
             <Table.Row>
@@ -45,7 +51,7 @@ class OtojobsRecent extends React.Component {
               return (
                 <Table.Row>
                   <Table.Cell colSpan='4'>
-                    <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/dashboard/' + each.transactionId)}>
+                    <div style={{ cursor: 'pointer' }}>
                       {each.transactionId}
                     </div>
                   </Table.Cell>
@@ -68,18 +74,18 @@ class OtojobsRecent extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    recentTransactions: state.OtoJobsReducer.recentTransactions
+    recentTransactions: state.DedupeReducer.recentTransactions
 
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    OtoJobsActions: bindActionCreators(OtoJobsActions, dispatch)
+    DedupeActions: bindActionCreators(DedupeActions, dispatch)
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(OtojobsRecent);
+)(DedupeRecent);
