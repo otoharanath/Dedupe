@@ -77,10 +77,10 @@ class OptionSelectModal extends React.Component {
            
            
             <div className="row">
-              <Box display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
+              <Box  display="flex" justifyContent="center" m={1} p={1} flexWrap="wrap">
                 {this.props.csvData.map((item) => {
                   return (
-                    <Box style={{ cursor: 'pointer' }} bgcolor={this.state.selectedOptions.includes(item) ? "green" : "white"}
+                    <Box borderRadius={4} style={{ cursor: 'pointer' }} bgcolor={this.state.selectedOptions.includes(item) ? "green" : "white"}
                       onClick={() => this.handleClick(item)} color={this.state.selectedOptions.includes(item) ? "white" : "black"} p={1} m={0.5} display='flex'
                       justifyContent='center'>{this.toProperCase(item.replace("_", " "))}</Box>)
                 })
