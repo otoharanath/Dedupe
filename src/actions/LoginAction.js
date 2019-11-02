@@ -9,8 +9,10 @@ export function signInAction({ email, password }, history) {
     try {
       const res = await axios.post(`${URL}/login`, { email, password });
       dispatch({ type: AUTHENTICATED });
+      console.log("res.data",res.data)
       localStorage.setItem('user', res.data.token);
       localStorage.setItem('customerId', res.data.customerId);
+      localStorage.setItem('name', res.data.name);
       history.push('/');
     } catch(error) {
       dispatch({

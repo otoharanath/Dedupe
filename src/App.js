@@ -82,7 +82,7 @@ class App extends React.Component {
       :null}
       <Navbar.Collapse className="justify-content-end">
       {   this.props.authenticated ?
-        <NavDropdown style={{ color: 'white' }} title="Ashrin Mathur" >
+        <NavDropdown style={{ color: 'white' }} title={localStorage.getItem('name')} >
         <NavDropdown.Item  onClick = {this.signOut}>Sign Out</NavDropdown.Item>
         </NavDropdown>
 
