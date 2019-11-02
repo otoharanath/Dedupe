@@ -350,11 +350,10 @@ class ResultTable extends React.Component {
   }
 
   render() {
-    console.log("last response",this.props.data)
+    
     return (
        
-      <div className="container-fluid"  style={{
-        
+      <div className="container-fluid"  style={{ 
             backgroundImage: `url(${bg})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
@@ -364,8 +363,8 @@ class ResultTable extends React.Component {
            }}>
         {this.props.dedupeData ?
           <div>
-<br/>
-        <Table className="ui inverted blue table"  >
+
+        <Table style={{ marginTop: "6px" }} className="ui inverted blue table"  >
           <thead className="sticky">
             <tr>
               {/*  <th>ID</th> */}

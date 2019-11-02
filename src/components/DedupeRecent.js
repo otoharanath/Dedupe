@@ -35,7 +35,7 @@ class DedupeRecent extends React.Component {
       }}>
        
 <br/>
-        <Table celled className="ui white  inverted table">
+        <Table style={{ marginTop: "4px" }} celled className="ui white  inverted table">
           <Table.Header >
             <Table.Row>
               <Table.HeaderCell style={{ position: "sticky" }} colSpan='4'>Transaction ID</Table.HeaderCell>

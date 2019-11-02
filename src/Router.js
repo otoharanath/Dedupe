@@ -6,6 +6,7 @@ import { Route, Link, Redirect, Switch } from 'react-router-dom';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ResultTable from './components/ResultTable';
+import ResultTablePrev from './components/ResultTablePrev';
 
 import Signin from './components/Signin';
 import OtojobsRecent from './components/OtojobsRecent';
@@ -40,6 +41,7 @@ class Router extends React.Component {
                 <Route exact path="/Login" component={noRequireAuth(Signin)} /> 
             
                 <Route path="/dashboard/:tranId" component={requireAuth(Dashboard)} />
+                <Route path="/dedupePrev/:transactionId/:version" component={requireAuth(ResultTablePrev)} />
                 
                 <Route path="/dedupeTable" component={requireAuth(ResultTable)} />
                 <Route path="/otojobsRecent" component={requireAuth(OtojobsRecent)} />

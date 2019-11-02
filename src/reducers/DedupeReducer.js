@@ -10,7 +10,8 @@ import {
   SHOW_SELECT_MODAL,
   IS_AUTH,
   DEDUPE_COLUMNS,
-  D_RECENT_TRANS
+  D_RECENT_TRANS,
+  TRAN_VERSION
 } from '../actions';
 
 const InitialState = {
@@ -24,7 +25,8 @@ const InitialState = {
   active: {},
   isAuth: false,
   dedupeColumns: [],
-  recentTransactions: {}
+  recentTransactions: {},
+  versionData:[]
 };
 
 let DedupeReducer = function (state = InitialState, action) {
@@ -61,6 +63,9 @@ let DedupeReducer = function (state = InitialState, action) {
 
     case FETCH_TABLE_DATA:
       return Object.assign({}, state, { dedupeData: action.dedupeData });
+
+    case TRAN_VERSION:
+      return Object.assign({}, state, { versionData: action.dedupeData });
 
     case FETCH_TABLE_DATA_PERCENTAGE:
       return Object.assign({}, state, { percentage: action.percentage || 5 });

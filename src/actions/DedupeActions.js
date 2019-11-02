@@ -10,7 +10,8 @@ import {
   SHOW_SELECT_MODAL,
   IS_AUTH,
   DEDUPE_COLUMNS,
-  D_RECENT_TRANS
+  D_RECENT_TRANS,
+  TRAN_VERSION
 } from '.';
 const token = localStorage.getItem('user');
 let actions = {
@@ -95,6 +96,30 @@ let actions = {
         
     };
   },
+
+  getTransactionVersions : (data) => {
+    return function (dispatch) {
+    const fd = new FormData();
+    fd.append('transactionId', data.transactionId)
+    fd.append('version', data.version)
+    fetch('https://otobots.otomashen.com:6969/dedupe/getTransactionState', {
+      method: 'POST',
+      headers: new Headers({
+        'Authorization': 'Bearer ' + token,
+    }),
+      body: fd
+    }).then((response) => response.json())
+     .then((response) => {
+          dispatch({
+            type: TRAN_VERSION,
+            dedupeData: 
+              response.message &&
+              response.message.dedupeData
+          })
+        }
+     )
+    }
+  },
   
   getTransactionStateUndoRedo : (data) => {
     return function (dispatch) {
@@ -176,6 +201,7 @@ let actions = {
       };
   },
 
+ 
 updateTransaction: (body, tid) => {
   
   return function (dispatch) {
