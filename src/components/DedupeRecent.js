@@ -23,6 +23,10 @@ class DedupeRecent extends React.Component {
     console.log("dat",dat)
   }
 
+  tranClick(tran) {
+    this.props.history.push('/dedupePrev/'+tran+'/0');
+  }
+
   render() {
     console.log("recentTransactions",this.props.recentTransactions)
     return (
@@ -51,7 +55,7 @@ class DedupeRecent extends React.Component {
               return (
                 <Table.Row>
                   <Table.Cell colSpan='4'>
-                    <div style={{ cursor: 'pointer' }}>
+                    <div onClick = {() => this.tranClick(each.transactionId)} style={{ cursor: 'pointer' }}>
                       {each.transactionId}
                     </div>
                   </Table.Cell>
