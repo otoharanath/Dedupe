@@ -21,13 +21,14 @@ class OtojobsRecent extends React.Component {
 
   render() {
     return (
-      <div className="container-fluid " style={{
-        backgroundImage: `url(${bg})`,
+      
+      <div className = "container-fluid" style={{
+        backgroundImage: `url(${bg})`, 
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
         overFlowY: "hidden"
-      }}>
+      }} >
         <br/>
         <Table style={{ marginTop: "4px" }} celled className="ui white  inverted table">
           <Table.Header >

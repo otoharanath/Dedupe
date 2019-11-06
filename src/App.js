@@ -31,7 +31,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      username : localStorage.getItem('name')
     };
   
     this.signOut = this.signOut.bind(this);
@@ -71,7 +71,7 @@ class App extends React.Component {
 
        {/*  <Nav.Link style={{ color: 'white' }} href="/Otojobs">Otojobs</Nav.Link> */}
        <NavDropdown  title={<strong style={{ color: 'white' }}>Dedupe</strong>} >
-        <NavDropdown.Item  href="/">New Job</NavDropdown.Item>
+        <NavDropdown.Item  href="/Dedupe">New Job</NavDropdown.Item>
         <NavDropdown.Divider />
         <NavDropdown.Item  href="/dedupeRecent">Recent Transactions</NavDropdown.Item>
         </NavDropdown>
@@ -82,7 +82,7 @@ class App extends React.Component {
       :null}
       <Navbar.Collapse className="justify-content-end">
       {   this.props.authenticated ?
-        <NavDropdown style={{ color: 'white' }} title={localStorage.getItem('name')} >
+        <NavDropdown style={{ color: 'white' }} title={this.state.username} >
         <NavDropdown.Item  onClick = {this.signOut}>Sign Out</NavDropdown.Item>
         </NavDropdown>
 

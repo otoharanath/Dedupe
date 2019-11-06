@@ -34,12 +34,12 @@ class Router extends React.Component {
             <div >
             <Switch>
                 
-                <Route exact path="/" component={requireAuth(MainContainer)} />
+                <Route exact path="/Dedupe" component={requireAuth(MainContainer)} />
                
                 <Route exact path="/Otojobs" component={requireAuth(OtoJobsMain)} /> 
                 
                 <Route exact path="/Login" component={noRequireAuth(Signin)} /> 
-                <Route exact path="/Home" component={requireAuth(HomePageDashboard)} /> 
+                <Route exact path="/" component={requireAuth(HomePageDashboard)} /> 
             
                 <Route path="/dashboard/:tranId" component={requireAuth(Dashboard)} />
                 <Route path="/dedupePrev/:transactionId/:version" component={requireAuth(ResultTablePrev)} />

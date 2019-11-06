@@ -68,7 +68,8 @@ body {
   background: rgba(0, 0, 0, 0.3);
 }
 
-
+.creditgroup {
+  display:none; }
 
 
 .liquid-gauge {

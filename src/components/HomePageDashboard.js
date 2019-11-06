@@ -83,7 +83,7 @@ class HomePageDashboard extends React.Component {
     let appendCount = this.state.dData && this.state.dData.message && this.state.dData.message.appendCount
     console.log("transactionCount", this.state.dData)
     return (
-      <Container>
+      <Container className = "body-db">
         
         {/* content area start */}
         <Container className="container-fluid pr-5 pl-5 pt-5 pb-5">
@@ -220,7 +220,7 @@ class HomePageDashboard extends React.Component {
                               caption: "Active Transactions",
                               theme: "ecommerce",
                               defaultCenterLabel: `44%`,
-                              paletteColors: "#3B70C4, #000000"
+                              paletteColors: "#41B6C4, #000000"
                             },
                             data: [
                               {
@@ -252,7 +252,7 @@ class HomePageDashboard extends React.Component {
                               caption: "Failed Transactions",
                               theme: "ecommerce",
                               defaultCenterLabel: `8%`,
-                              paletteColors: "#3B70C4, #000000"
+                              paletteColors: "#EDF8B1, #000000"
                             },
                             data: [
                               {
