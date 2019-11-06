@@ -7,7 +7,12 @@ import { Provider } from 'react-redux'
 import store from './store';
 import {BrowserRouter} from 'react-router-dom';
 import { AUTHENTICATED } from './actions/LoginAction';
+
 import '../node_modules/font-awesome/css/font-awesome.min.css'; 
+import 'react-dropdown/style.css';
+import './style.css';
+import "bootstrap/dist/css/bootstrap.css";
+//import '@fortawesome/fontawesome-free/css/all.css';
 
 const user = localStorage.getItem('user');
 
