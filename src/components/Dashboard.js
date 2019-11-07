@@ -230,17 +230,14 @@ class Dashboard extends React.Component {
                     <div className="col-md-4">
                       <Col style={{ color: "black" }}>
                         <br />
-                        <br />
+                        
                         <br />
                         <br />
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   
                 <strong style={{ fontSize: '40px' }}><CountUp start={0} end={57} /></strong>
-                        <br />
-                        <br />
-                        <br />
-
+                        
                       </Col>
 
                     </div>
@@ -279,7 +276,8 @@ class Dashboard extends React.Component {
 
 
                   </div>
-                  <br />
+                  
+                  <br /><br />
 
 
 

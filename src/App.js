@@ -4,10 +4,11 @@ import { bindActionCreators } from "redux";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
 import Navbar from "react-bootstrap/Navbar";
-import { Nav, Form, FormControl, NavItem, NavDropdown } from 'react-bootstrap';
+import { Nav, Form, FormControl, NavItem, NavDropdown, Button } from 'react-bootstrap';
 import { Link, withRouter } from 'react-router-dom';
 import Router from './Router';
 import  { signOutAction } from './actions/LoginAction';
+//import Sidebar from 'react-bootstrap-sidebar';
 import './App.css';
 
 
@@ -31,7 +32,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username : localStorage.getItem('name')
+      username : localStorage.getItem('name'),
+      isVisible : true
     };
   
     this.signOut = this.signOut.bind(this);
@@ -42,9 +44,15 @@ class App extends React.Component {
     this.props.signOutAction();
   }
 
+  updateModal(isVisible) {
+    this.state.isVisible = isVisible;
+    this.forceUpdate();
+  }
+
   render() {
     return (
       <div>
+       
          <Navbar style={{ background: 'black', color:"white" }} fluid sticky="top">
       <Navbar.Brand href="/">
         <img
@@ -93,7 +101,7 @@ class App extends React.Component {
       }
       </Navbar.Collapse>
     </Navbar>
-       
+    
         <Router />
       
       </div>

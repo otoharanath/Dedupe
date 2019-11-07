@@ -3,6 +3,7 @@ import React from 'react';
 import { Icon, Label, Menu, Table } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 
 const bg = require("./bg3.jpg");
@@ -33,7 +34,7 @@ class OtojobsRecent extends React.Component {
         <Table style={{ marginTop: "4px" }} celled className="ui white  inverted table">
           <Table.Header >
             <Table.Row>
-              <Table.HeaderCell style={{ position: "sticky" }} colSpan='4'>Transaction ID</Table.HeaderCell>
+              <Table.HeaderCell style={{ position: "sticky" }} colSpan='4'>Date & Time</Table.HeaderCell>
               <Table.HeaderCell style={{ position: "sticky" }} colSpan='4'>File Name</Table.HeaderCell>
               <Table.HeaderCell style={{ position: "sticky" }} colSpan='2'>Number of Records</Table.HeaderCell>
               <Table.HeaderCell style={{ position: "sticky" }} colSpan='2'>Completed</Table.HeaderCell>
@@ -43,11 +44,12 @@ class OtojobsRecent extends React.Component {
           <Table.Body>
 
             {this.props.recentTransactions && this.props.recentTransactions.message && this.props.recentTransactions.message.map((each) => {
+               let t = new Date(Number(each.timestamp))
               return (
                 <Table.Row>
                   <Table.Cell colSpan='4'>
                     <div style={{ cursor: 'pointer' }} onClick={() => this.props.history.push('/dashboard/' + each.transactionId)}>
-                      {each.transactionId}
+                    {moment(t).format('LLL')}
                     </div>
                   </Table.Cell>
                   <Table.Cell colSpan='4'>{each.fileName}</Table.Cell>
